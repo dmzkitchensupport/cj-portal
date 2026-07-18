@@ -532,7 +532,7 @@ body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;o
         <input class="stripe-field" id="payEmail" type="email" placeholder="Correo electrónico" autocomplete="email">
         <div id="stripe-card-element" style="border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa"></div>
         <button class="pay-btn" id="payBtn" onclick="procesarPago()">
-          <span id="payBtnText">🔒 Pagar $11,200 MXN y activar acceso</span>
+          <span id="payBtnText">🔒 Pagar $11,200 MXN · Activar acceso</span>
           <span id="payBtnLoad" style="display:none">Procesando...</span>
         </button>
         <div class="pay-secure">🔒 Pago seguro con Stripe · No guardamos datos de tarjeta</div>
@@ -954,7 +954,7 @@ function startAlertPolling(){
 
 
 /* ══ STRIPE INTEGRATION ══ */
-const CJ_STRIPE_PK = 'pk_live_PENDIENTE_STRIPE_KEY'; // Mario: pega aquí tu pk_live_
+const CJ_STRIPE_PK = 'pk_live_51TIdDxAG1jwOE13d63q93UeRysyTQCe7lvYEgpA7COnFml3UzE4UvOaqtiSYKzrS5idoDcHdk0luAorVujkIXyV800PgRTL9cQ'; // Mario: pega aquí tu pk_live_
 let stripeInstance = null;
 let stripeCard = null;
 
