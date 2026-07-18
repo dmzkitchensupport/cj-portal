@@ -1,6 +1,6 @@
 /* CJ Supabase Init — corazon-de-jaguar · DMZ org · 2026 */
-var VK_SB_URL='CJ_SUPABASE_URL_PENDIENTE';
-var VK_SB_KEY='CJ_SUPABASE_KEY_PENDIENTE';
+var VK_SB_URL='https://mspgqmlctatkoejgoech.supabase.co';
+var VK_SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zcGdxbWxjdGF0a29lamdvZWNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ0MDk1NDgsImV4cCI6MjA5OTk4NTU0OH0.F-U2Zsgtw6jPQK5IAoActBuecvpkVjISmi9uKsnLGCc';
 var vkSB=null;
 
 function initSB(){
