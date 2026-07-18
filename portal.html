@@ -528,14 +528,17 @@ body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;o
       <div id="payError" class="pay-error"></div>
 
       <div class="stripe-form" id="stripeForm">
-        <input class="stripe-field" id="payNombre" type="text" placeholder="Nombre completo" autocomplete="name">
-        <input class="stripe-field" id="payEmail" type="email" placeholder="Correo electrónico" autocomplete="email">
-        <div id="stripe-card-element" style="border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa"></div>
-        <button class="pay-btn" id="payBtn" onclick="procesarPago()">
-          <span id="payBtnText">🔒 Pagar $11,200 MXN y activar acceso</span>
-          <span id="payBtnLoad" style="display:none">Procesando...</span>
+        <input class="stripe-field" id="payNombre" type="text" placeholder="Nombre completo *" autocomplete="name">
+        <input class="stripe-field" id="payEmail" type="email" placeholder="Correo electrónico *" autocomplete="email">
+        <button class="pay-btn" id="payBtn" onclick="irAlPago()">
+          <span id="payBtnText">🔒 Pagar $11,200 MXN · Activar acceso</span>
         </button>
-        <div class="pay-secure">🔒 Pago seguro con Stripe · No guardamos datos de tarjeta</div>
+        <div class="pay-secure">🔒 Pago 100% seguro con Stripe · El acceso se activa en minutos</div>
+        <div style="margin-top:12px;padding:12px;background:#F9F6F2;border-radius:8px;font-size:11px;color:#6b7280">
+          <b>¿Qué incluye?</b><br>
+          Pago inicial: $11,200 MXN · Membresía mensual: $2,950 MXN/mes<br>
+          Cancela cuando quieras · Sin contrato forzado
+        </div>
       </div>
 
       <div class="pay-login-link">
@@ -954,7 +957,10 @@ function startAlertPolling(){
 
 
 /* ══ STRIPE INTEGRATION ══ */
-const CJ_STRIPE_PK = 'pk_live_51TIdDxAG1jwOE13d63q93UeRysyTQCe7lvYEgpA7COnFml3UzE4UvOaqtiSYKzrS5idoDcHdk0luAorVujkIXyV800PgRTL9cQ'; // Mario: pega aquí tu pk_live_
+const CJ_STRIPE_PK = 'pk_live_51TIdDxAG1jwOE13d63q93UeRysyTQCe7lvYEgpA7COnFml3UzE4UvOaqtiSYKzrS5idoDcHdk0luAorVujkIXyV800PgRTL9cQ';
+const CJ_PRICE_INIT = 'price_1TuflSAG1jwOE13dd5veC1Jq';
+const CJ_PRICE_MES = 'price_1TuflSAG1jwOE13dAf3mzVoh';
+const CJ_PAYMENT_LINK = 'https://buy.stripe.com/6oU3cudmjaCRbmL5hdfEk03'; // Mario: pega aquí tu pk_live_
 let stripeInstance = null;
 let stripeCard = null;
 
@@ -979,6 +985,36 @@ function mostrarPago() {
 function ocultarPago() {
   document.getElementById('payScreen').style.display = 'none';
 }
+
+function irAlPago() {
+  var nombre = document.getElementById('payNombre').value.trim();
+  var email  = document.getElementById('payEmail').value.trim();
+  var errEl  = document.getElementById('payError');
+  errEl.style.display = 'none';
+  if(!nombre || !email) {
+    errEl.textContent = 'Por favor llena tu nombre y correo antes de continuar.';
+    errEl.style.display = 'block'; return;
+  }
+  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    errEl.textContent = 'Correo electrónico inválido.';
+    errEl.style.display = 'block'; return;
+  }
+  // Ir a Stripe Checkout con los datos del cliente
+  var url = CJ_PAYMENT_LINK + '?prefilled_email=' + encodeURIComponent(email);
+  window.open(url, '_blank');
+}
+
+// Detectar retorno de Stripe con pago completado
+(function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('pago') === 'ok') {
+    document.addEventListener('DOMContentLoaded', function() {
+      var ps = document.getElementById('payScreen');
+      if(ps) ps.style.display = 'none';
+      alert('¡Pago recibido! Tu acceso está siendo activado. Inicia sesión con el correo que usaste en el pago.');
+    });
+  }
+})();
 
 async function procesarPago() {
   const nombre = document.getElementById('payNombre').value.trim();
