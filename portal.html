@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<title>Corazón de Jaguar · Portal Operativo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* ── CORAZÓN DE JAGUAR ── */
+  --cj:#393939; --cj-dark:#1C1C1C; --cj-light:#F9F6F2;
+  --cj-accent:#FF4279; --cj-orange:#FF8D4B; --cj-purple:#ab4493;
+  --cj-bg:rgba(57,57,57,.07); --cj-border:rgba(57,57,57,.3);
+  --kale:#393939;--juice:#FF4279;--cucumber:#FFD4B8;--lemon:#FF8D4B;
+  --spirulina:#1C1C1C;--coconut:#FEFEFC;--blueberry:#97B9FF;
+  --bg:#FEFEFC;--bg2:#F4F7EF;--text:#1A2E1F;--muted:#6B8A72;--dim:#a0b8a8;
+  --border:rgba(20,107,79,.1);--border2:rgba(20,107,79,.06);
+  --danger:#c0392b;--warn:#b07d20;
+  --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  /* categorías */
+  --cocina:#393939;--cocina-bg:rgba(20,107,79,.07);
+  --barra:#8B6914;--barra-bg:rgba(139,105,20,.07);
+  --almacen:#5A3B8C;--almacen-bg:rgba(90,59,140,.07);
+  --salon:#1A5E9A;--salon-bg:rgba(26,94,154,.07);
+  --servicio:#8C3B2A;--servicio-bg:rgba(140,59,42,.07);
+  --vitrinas:#2A7A3B;--vitrinas-bg:rgba(42,122,59,.07);
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px;}
+::selection{background:var(--cucumber);color:var(--cj);}
+
+/* ══ PANTALLA AUTH ══ */
+#auth-screen{
+  min-height:100vh;display:flex;align-items:stretch;
+  background:linear-gradient(135deg,var(--cj-dark) 0%,var(--cj) 55%,var(--cj-accent) 100%);
+}
+.auth-left{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:40px;
+}
+.auth-right{
+  width:460px;flex-shrink:0;background:var(--coconut);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:48px 44px;overflow-y:auto;
+}
+@media(max-width:760px){
+  #auth-screen{flex-direction:column;}
+  .auth-left{display:none;}
+  .auth-right{width:100%;min-height:100vh;}
+}
+.auth-brand{color:white;text-align:center;}
+.auth-mark{
+  width:72px;height:72px;background:rgba(255,255,255,.12);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  border:1.5px solid rgba(255,255,255,.2);
+}
+.auth-brand h1{font-size:32px;font-weight:700;letter-spacing:-1px;color:white;}
+.auth-brand p{font-size:14px;color:rgba(255,255,255,.6);margin-top:8px;line-height:1.6;}
+.auth-features{margin-top:36px;display:flex;flex-direction:column;gap:14px;text-align:left;}
+.af-item{display:flex;align-items:flex-start;gap:12px;}
+.af-dot{width:8px;height:8px;border-radius:50%;background:var(--cj-orange);flex-shrink:0;margin-top:5px;}
+.af-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.5;}
+
+/* Tabs login/registro */
+.auth-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:2px solid var(--border);}
+.auth-tab{flex:1;text-align:center;padding:10px;font-size:14px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.auth-tab.active{color:var(--cj);border-bottom-color:var(--cj);}
+.auth-panel{display:none;}
+.auth-panel.active{display:block;}
+
+.auth-title{font-size:22px;font-weight:700;color:var(--cj);margin-bottom:6px;letter-spacing:-.3px;}
+.auth-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:5px;margin-top:14px;}
+.field-label:first-of-type{margin-top:0;}
+.field-input,.field-select{
+  width:100%;border:1.5px solid var(--border);border-radius:10px;
+  padding:11px 14px;font-size:15px;font-family:var(--font);color:var(--text);
+  background:white;transition:border-color .2s;
+}
+.field-input:focus,.field-select:focus{outline:none;border-color:var(--cj);}
+.auth-btn{
+  width:100%;background:var(--cj);color:var(--cj-orange);border:none;border-radius:40px;
+  padding:14px;font-size:15px;font-weight:700;letter-spacing:.5px;
+  font-family:var(--font);cursor:pointer;transition:all .2s;margin-top:20px;
+}
+.auth-btn:hover{background:var(--cj-dark);transform:translateY(-1px);}
+.auth-error{background:#fff0f0;border:1px solid #ffcccc;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--danger);margin-bottom:14px;display:none;line-height:1.5;}
+.auth-error.show{display:block;}
+.auth-success{background:rgba(139,184,57,.1);border:1px solid rgba(139,184,57,.3);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--cj);margin-bottom:14px;display:none;line-height:1.5;}
+.auth-success.show{display:block;}
+.auth-footer{text-align:center;font-size:11px;color:var(--dim);margin-top:20px;line-height:1.6;}
+.auth-footer a{color:var(--cj);}
+
+/* ══ APP ══ */
+#app{display:none;min-height:100vh;background:var(--bg2);}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:100;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:rgba(254,254,252,.95);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.topbar-left{display:flex;align-items:center;gap:10px;}
+.topbar-mark{width:32px;height:32px;background:var(--cj);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.topbar-brand{font-size:13px;font-weight:700;color:var(--cj);letter-spacing:-.2px;}
+.topbar-brand small{display:block;font-size:9px;font-weight:400;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.user-chip{display:flex;align-items:center;gap:8px;}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--cucumber);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cj);}
+.user-name{font-size:12px;font-weight:600;color:var(--text);}
+.role-pill{font-size:9px;font-family:var(--mono);font-weight:700;letter-spacing:1.5px;padding:2px 7px;border-radius:8px;text-transform:uppercase;}
+.rp-admin{background:rgba(20,107,79,.12);color:var(--cj);}
+.rp-propietario{background:rgba(0,80,86,.1);color:var(--cj-dark);}
+.rp-gerente{background:rgba(151,185,255,.2);color:#1a3a7a;}
+.rp-chef{background:rgba(20,107,79,.1);color:var(--cj);}
+.rp-barista{background:rgba(139,105,20,.15);color:#5a3a00;}
+.rp-mesero{background:rgba(140,59,42,.12);color:#5a1a0a;}
+.rp-limpieza{background:rgba(150,150,150,.12);color:#444;}
+.logout-btn{background:transparent;border:1.5px solid var(--border);border-radius:8px;color:var(--muted);padding:6px 12px;font-size:11px;cursor:pointer;font-family:var(--font);transition:all .2s;}
+.logout-btn:hover{background:var(--cucumber);border-color:var(--cj-accent);color:var(--cj);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 56px);}
+
+/* SIDEBAR */
+.sidebar{background:var(--coconut);border-right:1px solid var(--border);overflow-y:auto;position:sticky;top:56px;height:calc(100vh - 56px);}
+.sidebar-inner{padding:12px 0 20px;}
+.sidebar-section{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--dim);padding:14px 14px 5px;}
+.cat-header i{font-size:16px;}
+.cat-header{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;cursor:pointer;
+  font-size:13px;font-weight:600;color:var(--text);
+  transition:background .15s;border-radius:0;
+  user-select:none;
+}
+.cat-header:hover{background:var(--bg2);}
+.cat-header.locked{opacity:.35;cursor:not-allowed;}
+.cat-icon{font-size:18px;width:22px;text-align:center;flex-shrink:0;color:inherit;line-height:1;display:flex;align-items:center;justify-content:center;}
+.cat-name{flex:1;}
+.cat-chevron{font-size:14px;color:var(--dim);transition:transform .2s;margin-left:auto;line-height:1;}
+.cat-header.open .cat-chevron{transform:rotate(90deg);}
+.cat-lock{font-size:14px;color:var(--dim);margin-left:auto;line-height:1;}
+
+/* SUBCATEGORÍAS */
+.subcats{display:none;background:rgba(0,0,0,.018);}
+.subcats.open{display:block;}
+.subcat-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 14px 7px 40px;cursor:pointer;
+  font-size:12px;color:var(--muted);
+  border-left:2.5px solid transparent;transition:all .15s;
+}
+.subcat-item:hover{background:var(--bg2);color:var(--text);}
+.subcat-item.active{color:var(--cj);font-weight:600;border-left-color:var(--cj);background:rgba(20,107,79,.04);}
+.subcat-item.locked{opacity:.35;cursor:not-allowed;}
+.subcat-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+
+/* COLOR POR CAT */
+.cat-teal  .cat-header:hover,.cat-teal  .subcat-item:hover{background:var(--cocina-bg);}
+.cat-teal  .subcat-item.active{border-left-color:var(--cj);color:var(--cj);}
+.cat-amber .cat-header:hover,.cat-amber .subcat-item:hover{background:var(--barra-bg);}
+.cat-amber .subcat-item.active{border-left-color:var(--barra);color:var(--barra);}
+.cat-purple.cat-header:hover,.cat-purple .subcat-item:hover{background:var(--almacen-bg);}
+.cat-purple .subcat-item.active{border-left-color:var(--almacen);color:var(--almacen);}
+.cat-blue  .cat-header:hover,.cat-blue  .subcat-item:hover{background:var(--salon-bg);}
+.cat-blue  .subcat-item.active{border-left-color:var(--salon);color:var(--salon);}
+.cat-coral .cat-header:hover,.cat-coral .subcat-item:hover{background:var(--servicio-bg);}
+.cat-coral .subcat-item.active{border-left-color:var(--servicio);color:var(--servicio);}
+.cat-green .cat-header:hover,.cat-green .subcat-item:hover{background:var(--vitrinas-bg);}
+.cat-green .subcat-item.active{border-left-color:var(--vitrinas);color:var(--vitrinas);}
+
+/* TRANSVERSAL */
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;border-left:2.5px solid transparent;}
+.nav-item:hover{background:var(--bg2);color:var(--text);}
+.nav-item.active{color:var(--cj);font-weight:600;border-left-color:var(--cj);background:rgba(20,107,79,.04);}
+.nav-item.locked{opacity:.35;cursor:not-allowed;}
+
+/* CONTENT */
+.content{padding:24px 28px;overflow-y:auto;}
+
+/* HOME */
+.home-greeting{margin-bottom:24px;}
+.home-greeting h2{font-size:22px;font-weight:700;color:var(--cj);letter-spacing:-.3px;}
+.home-greeting p{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.6;}
+.cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+@media(max-width:900px){.cats-grid{grid-template-columns:1fr 1fr;}}
+.cat-card{
+  background:white;border:1.5px solid var(--border);border-radius:14px;
+  padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.cat-card:hover:not(.cat-card-locked){transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.06);}
+.cat-card-locked{opacity:.4;cursor:not-allowed;}
+.cat-card-icon{font-size:28px;margin-bottom:10px;display:block;}
+.cat-card-name{font-size:14px;font-weight:700;margin-bottom:4px;}
+.cat-card-subs{font-size:11px;color:var(--muted);}
+.cat-card-count{position:absolute;top:14px;right:14px;font-size:10px;font-family:var(--mono);background:var(--bg2);color:var(--muted);padding:2px 7px;border-radius:8px;}
+.cat-card-lock{position:absolute;top:14px;right:14px;font-size:14px;opacity:.35;}
+
+/* FORM PANEL */
+.fp{background:white;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:18px;}
+.fp-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:2px solid;background:var(--bg2);}
+.fp-head.cocina{border-color:var(--cj);}
+.fp-head.barra{border-color:var(--barra);}
+.fp-head.almacen{border-color:var(--almacen);}
+.fp-head.salon{border-color:var(--salon);}
+.fp-head.servicio{border-color:var(--servicio);}
+.fp-head.vitrinas{border-color:var(--vitrinas);}
+.fp-title{font-size:14px;font-weight:700;}
+.fp-head.cocina .fp-title{color:var(--cj);}
+.fp-head.barra .fp-title{color:var(--barra);}
+.fp-head.almacen .fp-title{color:var(--almacen);}
+.fp-head.salon .fp-title{color:var(--salon);}
+.fp-head.servicio .fp-title{color:var(--servicio);}
+.fp-head.vitrinas .fp-title{color:var(--vitrinas);}
+.fp-sub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.5px;text-transform:uppercase;}
+.fp-acts{display:flex;gap:7px;}
+.btn{border:none;border-radius:8px;padding:7px 13px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:var(--font);transition:all .15s;display:flex;align-items:center;gap:5px;}
+.btn-kale{background:var(--cj);color:var(--cj-orange);}
+.btn-kale:hover{background:var(--cj-dark);}
+.btn-ghost{background:transparent;color:var(--cj);border:1.5px solid var(--border);}
+.btn-ghost:hover{background:var(--cucumber);}
+.btn-sm{padding:5px 10px;font-size:10px;}
+.fp-body{padding:16px 18px 18px;}
+.meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--bg2);border-radius:8px;}
+.meta-f label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:4px;}
+.meta-f input,.meta-f select{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13px;font-family:var(--font);color:var(--text);background:white;}
+.meta-f input:focus,.meta-f select:focus{outline:none;border-color:var(--cj);}
+
+/* CHECKLIST */
+.cl-ban{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:5px 10px;margin:10px 0 0;border-radius:5px;
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:white;
+}
+.cl-table{width:100%;border-collapse:collapse;margin-top:1px;}
+.cl-table th{font-size:9px;font-family:var(--mono);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);padding:6px 8px;background:var(--bg2);border:1px solid var(--border2);}
+.cl-row td{border:1px solid var(--border2);padding:0;height:27px;}
+.cl-row:nth-child(even) td{background:#fafffe;}
+.cl-row:nth-child(odd) td{background:white;}
+.cl-row:hover td{background:var(--cucumber);}
+.cl-num{font-family:var(--mono);font-size:10px;color:var(--dim);text-align:center;padding:0 7px;width:30px;vertical-align:middle;}
+.cl-inp{width:100%;border:none;background:transparent;padding:0 9px;font-size:13px;font-family:var(--font);height:27px;}
+.cl-inp:focus{outline:none;background:var(--cucumber);}
+.cl-chk{text-align:center;vertical-align:middle;width:32px;}
+.cl-chk input{width:14px;height:14px;accent-color:var(--cj);}
+.cl-del{width:28px;text-align:center;vertical-align:middle;}
+.cl-del button{background:none;border:none;color:var(--dim);cursor:pointer;font-size:13px;padding:0 4px;}
+.cl-del button:hover{color:var(--danger);}
+.add-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;margin-top:3px;background:transparent;border:1.5px dashed var(--border);border-radius:5px;color:var(--muted);font-size:11px;cursor:pointer;width:100%;font-family:var(--font);transition:all .15s;}
+.add-btn:hover{background:var(--bg2);border-color:var(--cj);}
+
+/* TABLA INVENTARIO */
+.inv-table{width:100%;border-collapse:collapse;}
+.inv-table th{font-size:9px;font-family:var(--mono);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:white;padding:7px 10px;text-align:center;}
+.inv-table td{border:1px solid var(--border2);padding:0;height:25px;}
+.inv-table tr:nth-child(even) td{background:#f9fffe;}
+.inv-table tr:nth-child(odd) td{background:white;}
+.inv-td-desc{font-size:13px;color:var(--text);padding:0 8px;border:1px solid var(--border2);height:25px;vertical-align:middle;}
+.inv-inp{width:100%;border:none;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;height:25px;padding:0 4px;}
+.inv-inp:focus{outline:none;background:var(--cucumber);}
+.inv-inp.desc{text-align:left;font-family:var(--font);font-size:13px;padding:0 8px;}
+
+/* CARDS SERVICIO/REPORTES */
+.info-card{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:10px;}
+.info-card h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.info-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+.status-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.status-row:last-child{border-bottom:none;}
+.status-label{color:var(--muted);}
+.status-val{font-family:var(--mono);font-weight:600;}
+.status-val.ok{color:var(--cj-accent);}
+.status-val.warn{color:var(--warn);}
+
+/* ACCESS DENIED */
+.denied{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center;}
+.denied-icon{font-size:44px;margin-bottom:14px;opacity:.25;}
+.denied-title{font-size:17px;font-weight:700;color:var(--muted);margin-bottom:8px;}
+.denied-sub{font-size:13px;color:var(--muted);line-height:1.6;max-width:300px;}
+
+/* ADMIN */
+.admin-bar{background:rgba(224,237,48,.08);border:1px solid rgba(224,237,48,.2);border-radius:8px;padding:10px 14px;margin-bottom:18px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--cj);}
+.admin-badge-sm{background:var(--cj-orange);color:var(--cj-dark);font-size:9px;font-weight:700;letter-spacing:2px;padding:2px 7px;border-radius:4px;font-family:var(--mono);}
+.user-table{width:100%;border-collapse:collapse;}
+.user-table th{background:var(--cucumber);color:var(--cj);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 12px;text-align:left;font-family:var(--mono);}
+.user-table td{padding:10px 12px;border-bottom:1px solid var(--border2);font-size:13px;color:var(--text);vertical-align:middle;}
+.user-table tr:last-child td{border-bottom:none;}
+.user-table tr:hover td{background:rgba(20,107,79,.02);}
+.act-btn{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:4px 9px;font-size:11px;cursor:pointer;font-family:var(--font);color:var(--cj);transition:all .15s;}
+.act-btn:hover{background:var(--cucumber);}
+
+/* MODAL */
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal{background:white;border-radius:16px;padding:28px;width:500px;max-width:100%;box-shadow:0 20px 60px rgba(0,0,0,.15);max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:16px;font-weight:700;color:var(--cj);margin-bottom:18px;}
+.area-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;}
+.area-chk{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:12px;color:var(--muted);transition:all .15s;}
+.area-chk:hover{border-color:var(--cj-accent);background:rgba(139,184,57,.04);}
+.area-chk input{width:14px;height:14px;accent-color:var(--cj);}
+.modal-actions{display:flex;gap:8px;margin-top:20px;justify-content:flex-end;}
+.btn-cancel{background:var(--bg2);color:var(--muted);border:none;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:var(--font);}
+
+/* FADE */
+.fade-in{opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s;}
+.fade-in.show{opacity:1;transform:none;}
+
+.alert-bell{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;cursor:pointer;background:transparent;
+  border:1px solid rgba(255,255,255,.2);transition:background .15s;margin-right:8px;flex-shrink:0}
+.alert-bell:hover{background:rgba(255,255,255,.1)}
+.alert-bell .ti{font-size:16px;color:rgba(255,255,255,.85)}
+.al-badge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;
+  border-radius:9px;background:#FF8D4B;color:#1C1C1C;font-size:9px;font-weight:700;
+  display:none;align-items:center;justify-content:center;padding:0 4px}
+.al-panel{position:fixed;top:54px;right:12px;width:330px;max-height:420px;
+  background:#fff;border:1px solid #ddd;border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:9999;overflow:hidden;display:none}
+.al-panel.open{display:block}
+.al-head{background:#1C1C1C;color:#fff;padding:10px 14px;font-size:13px;font-weight:500;
+  display:flex;justify-content:space-between;align-items:center}
+.al-head button{background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;
+  font-size:20px;line-height:1;padding:0}
+.al-list{overflow-y:auto;max-height:355px}
+.al-item{padding:10px 14px;border-bottom:1px solid #f3f3f3;cursor:pointer;transition:background .1s}
+.al-item:hover{background:#f9fafb}.al-item:last-child{border-bottom:none}
+.al-sev{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
+.al-sev.critica{color:#C0392B}.al-sev.importante{color:#B07D20}.al-sev.informativa{color:#185FA5}
+.al-title{font-size:12px;font-weight:500;color:#1A1A18;margin-bottom:2px}
+.al-msg{font-size:11px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.al-time{font-size:10px;color:#9ca3af;margin-top:3px}
+.al-empty{padding:24px;text-align:center;color:#9ca3af;font-size:13px}
+
+/* ── STRIPE PAYMENT SCREEN ── */
+.pay-screen{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(135deg,#1C1C1C 0%,#393939 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Anek Odia',-apple-system,sans-serif;
+}
+.pay-card{
+  background:#fff;border-radius:16px;
+  width:100%;max-width:480px;overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.4);
+  margin:16px;
+}
+.pay-header{
+  background:#1C1C1C;padding:28px 32px 24px;text-align:center;
+}
+.pay-logo{
+  font-size:22px;font-weight:600;color:#FF8D4B;
+  letter-spacing:.04em;margin-bottom:4px;
+}
+.pay-tagline{font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase}
+.pay-body{padding:28px 32px 32px}
+.pay-title{font-size:18px;font-weight:600;color:#1C1C1C;margin-bottom:6px;text-align:center}
+.pay-sub{font-size:13px;color:#6b7280;text-align:center;margin-bottom:24px}
+.plan-box{
+  border:1.5px solid #393939;border-radius:12px;padding:20px;
+  margin-bottom:16px;position:relative;
+}
+.plan-box.featured{border-color:#FF4279;background:#FFF5F7}
+.plan-badge{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:#FF4279;color:#fff;font-size:10px;font-weight:600;
+  padding:2px 12px;border-radius:10px;letter-spacing:.06em;white-space:nowrap;
+}
+.plan-name{font-size:14px;font-weight:600;color:#1C1C1C;margin-bottom:4px}
+.plan-price{font-size:28px;font-weight:700;color:#393939;line-height:1}
+.plan-price span{font-size:13px;font-weight:400;color:#6b7280}
+.plan-desc{font-size:12px;color:#6b7280;margin-top:6px}
+.plan-features{list-style:none;margin-top:12px;padding:0}
+.plan-features li{font-size:12px;color:#4b5563;padding:3px 0;display:flex;gap:6px;align-items:flex-start}
+.plan-features li::before{content:'✓';color:#FF4279;font-weight:700;flex-shrink:0}
+.stripe-form{margin-top:20px}
+.stripe-field{
+  border:1px solid #e5e7eb;border-radius:8px;padding:12px;
+  font-size:14px;margin-bottom:12px;width:100%;
+  font-family:inherit;color:#1C1C1C;background:#fafafa;
+  transition:border-color .15s;outline:none;
+}
+.stripe-field:focus{border-color:#FF4279;background:#fff}
+.stripe-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pay-btn{
+  width:100%;padding:14px;border-radius:10px;border:none;
+  background:linear-gradient(135deg,#FF4279,#FF8D4B);
+  color:#fff;font-size:15px;font-weight:600;
+  cursor:pointer;transition:opacity .15s;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.pay-btn:hover{opacity:.9}
+.pay-btn:disabled{opacity:.6;cursor:not-allowed}
+.pay-secure{text-align:center;font-size:11px;color:#9ca3af;margin-top:12px}
+.pay-login-link{
+  text-align:center;margin-top:16px;font-size:13px;color:#6b7280;
+}
+.pay-login-link a{color:#FF4279;text-decoration:none;font-weight:500}
+.pay-error{
+  background:#FFF5F7;border:1px solid #FFB3C6;
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:#C0392B;margin-bottom:12px;display:none;
+}
+.pay-loading{display:none}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     PANTALLA AUTH
+══════════════════════════════ -->
+<div id="auth-screen">
+  <div class="auth-left">
+    <div class="auth-brand">
+      <div class="auth-mark">
+        <svg viewBox="0 0 40 40" fill="none" width="36" height="36">
+          <g transform="translate(20,20)">
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(0)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(45)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(90)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(135)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(180)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(225)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(270)"/>
+            <line x1="0" y1="-11" x2="0" y2="-7" stroke="#FF8D4B" stroke-width="2" stroke-linecap="round" transform="rotate(315)"/>
+            <circle cx="0" cy="0" r="3" fill="none" stroke="#FF8D4B" stroke-width="1.5"/>
+          </g>
+        </svg>
+      </div>
+      <h1>corazón de jaguar</h1>
+      <p>Portal Operativo · México<br>Alimentos reales, energía natural<br>y hábitos conscientes.</p>
+      <div class="auth-features">
+        <div class="af-item"><div class="af-dot"></div><div class="af-text">6 áreas operativas con 36 módulos de control</div></div>
+        <div class="af-item"><div class="af-dot"></div><div class="af-text">Acceso personalizado por familia y área</div></div>
+        <div class="af-item"><div class="af-dot"></div><div class="af-text">Bitácoras, checklists e inventarios en tiempo real</div></div>
+        <div class="af-item"><div class="af-dot"></div><div class="af-text">Audit trail y trazabilidad completa de operación</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</div>
+      <div class="auth-tab" onclick="switchTab('registro')">Registrarse</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-panel active" id="panel-login">
+      <div class="auth-title">Bienvenido de vuelta</div>
+      <div class="auth-sub">Ingresa con tus credenciales para acceder a tu área operativa.</div>
+      <div class="auth-error" id="login-error"></div>
+      <label class="field-label">Correo electrónico</label>
+      <input class="field-input" id="login-email" type="email" placeholder="tu@corazondejaguar.mx">
+      <label class="field-label">Contraseña</label>
+      <input class="field-input" id="login-pass" type="password" placeholder="••••••••">
+      <button class="auth-btn" onclick="doLogin()">Ingresar →</button>
+      <div class="auth-footer">
+        ¿No tienes cuenta? <span style="color:var(--cj);cursor:pointer;font-weight:600;" onclick="switchTab('registro')">Regístrate</span><br>
+        <a href="/">← Volver al sitio</a>
+      </div>
+    </div>
+
+    <!-- REGISTRO -->
+    <div class="auth-panel" id="panel-registro">
+      <div class="auth-title">Solicitar acceso</div>
+      <div class="auth-sub">Crea tu cuenta. El administrador la activará antes de que puedas ingresar.</div>
+      <div class="auth-error" id="reg-error"></div>
+      <div class="auth-success" id="reg-success"></div>
+      <label class="field-label">Nombre completo</label>
+      <input class="field-input" id="reg-name" type="text" placeholder="Tu nombre completo">
+      <label class="field-label">Correo electrónico</label>
+      <input class="field-input" id="reg-email" type="email" placeholder="tu@corazondejaguar.mx">
+      <label class="field-label">Contraseña</label>
+      <input class="field-input" id="reg-pass" type="password" placeholder="mínimo 6 caracteres">
+      <label class="field-label">Tu área de trabajo</label>
+      <select class="field-select" id="reg-area">
+        <option value="">Selecciona tu área principal...</option>
+        <option value="chef">Cocina — Chef / Ayudante</option>
+        <option value="barista">Barra — Barista</option>
+        <option value="mesero">Salón & Servicio — Mesero</option>
+        <option value="limpieza">Limpieza</option>
+        <option value="gerente">Gerencia</option>
+        <option value="otro">Otro</option>
+      </select>
+      <button class="auth-btn" onclick="doRegistro()">Solicitar acceso →</button>
+      <div class="auth-footer">
+        ¿Ya tienes cuenta? <span style="color:var(--cj);cursor:pointer;font-weight:600;" onclick="switchTab('login')">Iniciar sesión</span><br>
+        <a href="/">← Volver al sitio</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     APP
+══════════════════════════════ -->
+
+<!-- ══ STRIPE PAYMENT SCREEN ══ -->
+<div id="payScreen" class="pay-screen" style="display:none">
+  <div class="pay-card">
+    <div class="pay-header">
+      <div class="pay-logo">CORAZÓN DE JAGUAR</div>
+      <div class="pay-tagline">Portal Operativo · DMZ Kitchen Support</div>
+    </div>
+    <div class="pay-body">
+      <div class="pay-title">Acceso al Portal Operativo</div>
+      <div class="pay-sub">Elige tu plan e ingresa tus datos de pago</div>
+
+      <div class="plan-box featured">
+        <div class="plan-badge">RECOMENDADO</div>
+        <div class="plan-name">Plan Completo</div>
+        <div class="plan-price">$11,200 <span>MXN pago inicial</span></div>
+        <div class="plan-desc">+ $2,950 MXN/mes membresía</div>
+        <ul class="plan-features">
+          <li>Portal operativo completo (36 módulos)</li>
+          <li>6 áreas: Cocina, Barra, Almacén, Salón, Servicio, Vitrinas</li>
+          <li>Historial y reportes en nube (Supabase)</li>
+          <li>Alertas automáticas por email</li>
+          <li>Soporte DMZ Kitchen Support</li>
+        </ul>
+      </div>
+
+      <div id="payError" class="pay-error"></div>
+
+      <div class="stripe-form" id="stripeForm">
+        <input class="stripe-field" id="payNombre" type="text" placeholder="Nombre completo" autocomplete="name">
+        <input class="stripe-field" id="payEmail" type="email" placeholder="Correo electrónico" autocomplete="email">
+        <div id="stripe-card-element" style="border:1px solid #e5e7eb;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa"></div>
+        <button class="pay-btn" id="payBtn" onclick="procesarPago()">
+          <span id="payBtnText">🔒 Pagar $11,200 MXN y activar acceso</span>
+          <span id="payBtnLoad" style="display:none">Procesando...</span>
+        </button>
+        <div class="pay-secure">🔒 Pago seguro con Stripe · No guardamos datos de tarjeta</div>
+      </div>
+
+      <div class="pay-login-link">
+        ¿Ya tienes cuenta? <a href="#" onclick="ocultarPago()">Iniciar sesión</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-mark">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <g transform="translate(12,12)">
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(0)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(45)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(90)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(135)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(180)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(225)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(270)"/>
+            <line x1="0" y1="-7" x2="0" y2="-4.5" stroke="#FF8D4B" stroke-width="1.8" stroke-linecap="round" transform="rotate(315)"/>
+            <circle cx="0" cy="0" r="2" fill="none" stroke="#FF8D4B" stroke-width="1"/>
+          </g>
+        </svg>
+      </div>
+      <div class="topbar-brand">corazón de jaguar<small>portal operativo</small></div>
+    </div>
+    <div class="topbar-right">
+      <div class="alert-bell" id="alertBell" onclick="toggleAlertPanel()" title="Alertas">
+        <i class="ti ti-bell"></i>
+        <span class="al-badge" id="alertBadge">0</span>
+      </div>
+      <div class="al-panel" id="alertPanel">
+        <div class="al-head">
+          <span id="alertPanelTitle">Alertas de hoy</span>
+          <button onclick="toggleAlertPanel()">&#215;</button>
+        </div>
+        <div class="al-list" id="alertList"><div class="al-empty">Sin alertas</div></div>
+      </div>
+      <div class="user-chip">
+        <div class="user-avatar" id="tb-avatar">—</div>
+        <div>
+          <div class="user-name" id="tb-name">—</div>
+          <div><span class="role-pill" id="tb-role">—</span></div>
+        </div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <nav class="sidebar"><div class="sidebar-inner" id="sidebar-inner"></div></nav>
+    <main class="content" id="main-content"></main>
+  </div>
+</div>
+
+<!-- MODAL USUARIO -->
+<div class="modal-back" id="user-modal" style="display:none;">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Nuevo usuario</div>
+    <label class="field-label">Nombre completo</label>
+    <input class="field-input" id="m-name" type="text">
+    <label class="field-label">Correo</label>
+    <input class="field-input" id="m-email" type="email">
+    <label class="field-label">Contraseña</label>
+    <input class="field-input" id="m-pass" type="text">
+    <label class="field-label">Familia / Rol</label>
+    <select class="field-select" id="m-rol" onchange="updateModalAreas()">
+      <option value="propietario">Propietario</option>
+      <option value="gerente">Gerente</option>
+      <option value="chef">Chef</option>
+      <option value="barista">Barista</option>
+      <option value="mesero">Mesero</option>
+      <option value="limpieza">Limpieza</option>
+    </select>
+    <label class="field-label">Áreas de acceso</label>
+    <div class="area-grid" id="modal-areas"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-kale" onclick="saveUser()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="vk-sb-init.js"></script>
+<script>
+/* ════════════════════════════════════
+   ESTRUCTURA CATEGORÍAS + SUBCATS
+════════════════════════════════════ */
+const ESTRUCTURA = [
+  {
+    id:'cocina', name:'Cocina', icon:'<i class="ti ti-tools-kitchen-2"></i>', color:'var(--cj)', css:'teal',
+    subs:[
+      {id:'cocina-produccion',  name:'Producción diaria'},
+      {id:'cocina-recetas',     name:'Control de recetas'},
+      {id:'cocina-inocuidad',   name:'Inocuidad / PEPS'},
+      {id:'cocina-merma',       name:'Merma y desperdicios'},
+      {id:'cocina-checklist',   name:'Checklist apertura / cierre'},
+      {id:'cocina-temperatura',      name:'Temperaturas / equipos'},
+      {id:'cocina-display-sabores',  name:'Display de Sabores'},
+    ]
+  },
+  {
+    id:'barra', name:'Barra', icon:'<i class="ti ti-coffee"></i>', color:'var(--barra)', css:'amber',
+    subs:[
+      {id:'barra-espresso',    name:'Café espresso'},
+      {id:'barra-frias',       name:'Bebidas frías / matcha'},
+      {id:'barra-calibracion', name:'Calibración espresso'},
+      {id:'barra-insumos',     name:'Control de insumos'},
+      {id:'barra-merma',       name:'Merma de leche / café'},
+      {id:'barra-checklist',         name:'Checklist turno'},
+      {id:'barra-display-sabores',   name:'Display de Sabores'},
+    ]
+  },
+  {
+    id:'almacen', name:'Almacén', icon:'<i class="ti ti-package"></i>', color:'var(--almacen)', css:'purple',
+    subs:[
+      {id:'almacen-inventario', name:'Inventario general'},
+      {id:'almacen-entradas',   name:'Entradas de mercancía'},
+      {id:'almacen-salidas',    name:'Salidas / requisiciones'},
+      {id:'almacen-peps',       name:'PEPS / caducidades'},
+      {id:'almacen-proveedores',name:'Proveedores'},
+      {id:'almacen-conteo',     name:'Conteo quincenal'},
+    ]
+  },
+  {
+    id:'salon', name:'Salón', icon:'<i class="ti ti-tools-kitchen"></i>', color:'var(--salon)', css:'blue',
+    subs:[
+      {id:'salon-montaje',    name:'Montaje y mise en place'},
+      {id:'salon-checklist',  name:'Checklist apertura / cierre'},
+      {id:'salon-mesas',      name:'Control de mesas'},
+      {id:'salon-limpieza',   name:'Limpieza de salón'},
+      {id:'salon-supervisor', name:'Supervisión de turno'},
+      {id:'salon-banos',      name:'Bitácora baños'},
+    ]
+  },
+  {
+    id:'servicio', name:'Servicio', icon:'<i class="ti ti-users"></i>', color:'var(--servicio)', css:'coral',
+    subs:[
+      {id:'servicio-protocolo',     name:'Protocolo de atención'},
+      {id:'servicio-tiempos',       name:'Tiempos de servicio'},
+      {id:'servicio-satisfaccion',  name:'Satisfacción del cliente'},
+      {id:'servicio-comandas',      name:'Comandas / pedidos'},
+      {id:'servicio-venta',         name:'Venta sugerida'},
+      {id:'servicio-incidencias',   name:'Incidencias / reportes'},
+    ]
+  },
+  {
+    id:'vitrinas', name:'Vitrinas', icon:'<i class="ti ti-bread"></i>', color:'var(--vitrinas)', css:'green',
+    subs:[
+      {id:'vitrinas-exhibicion',   name:'Exhibición y montaje'},
+      {id:'vitrinas-conteo',       name:'Conteo de producto'},
+      {id:'vitrinas-rotacion',     name:'Rotación / caducidades'},
+      {id:'vitrinas-limpieza',     name:'Limpieza de vitrina'},
+      {id:'vitrinas-sobrantes',    name:'Registro sobrantes'},
+      {id:'vitrinas-temperatura',  name:'Temperatura de vitrina'},
+    ]
+  },
+];
+
+const TRANSVERSALES = [
+  {id:'supervisor',  name:'Supervisor',          icon:'<i class="ti ti-eye"></i>'},
+  {id:'alertas',     name:'Alertas & Reportes',  icon:'<i class="ti ti-bell"></i>'},
+];
+
+/* ════════════════════════════════════
+   FAMILIAS DE ACCESO
+════════════════════════════════════ */
+const FAMILIAS = {
+  admin:       {label:'Control Absoluto', pill:'rp-admin',      cats:['cocina','barra','almacen','salon','servicio','vitrinas'], trans:['supervisor','alertas','admin-users']},
+  propietario: {label:'Propietario',      pill:'rp-propietario', cats:['cocina','barra','almacen','salon','servicio','vitrinas'], trans:['supervisor','alertas']},
+  gerente:     {label:'Gerente',          pill:'rp-gerente',     cats:['cocina','barra','almacen','salon','servicio','vitrinas'], trans:['supervisor','alertas']},
+  chef:        {label:'Chef',             pill:'rp-chef',        cats:['cocina','almacen'],  trans:[]},
+  barista:     {label:'Barista',          pill:'rp-barista',     cats:['barra','vitrinas'],  trans:[]},
+  mesero:      {label:'Mesero',           pill:'rp-mesero',      cats:['salon','servicio','vitrinas'], trans:[]},
+  limpieza:    {label:'Limpieza',         pill:'rp-limpieza',    cats:['salon'],             trans:[]},
+};
+
+/* ════════════════════════════════════
+   USUARIOS
+════════════════════════════════════ */
+const DMZ = [
+  {id:'dmz1',name:'Mario DMZ',  email:'mario@delamorazumaran.com', pass:'VK.DMZ2026',rol:'admin',active:true,hidden:true},
+  {id:'dmz2',name:'Blanca DMZ', email:'blanca@delamorazumaran.com',pass:'VK.DMZ2026',rol:'admin',active:true,hidden:true},
+];
+
+function getUsers(){
+  try{ return JSON.parse(localStorage.getItem('vk_users_v2')||'[]'); }catch(e){return [];}
+}
+function saveUsers(u){ try{localStorage.setItem('vk_users_v2',JSON.stringify(u));}catch(e){} }
+function initUsers(){
+  let users = getUsers();
+  DMZ.forEach(d=>{
+    const idx=users.findIndex(u=>u.id===d.id);
+    if(idx>=0) users[idx]={...d};
+    else users.unshift({...d});
+  });
+  saveUsers(users);
+}
+initUsers();
+
+/* ════════════════════════════════════
+   AUTH
+════════════════════════════════════ */
+let CU = null; // current user
+
+function switchTab(tab){
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='login'?0:1)));
+  document.getElementById('panel-login').classList.toggle('active',tab==='login');
+  document.getElementById('panel-registro').classList.toggle('active',tab==='registro');
+}
+
+function doLogin(){
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('login-pass').value.trim();
+  const err   = document.getElementById('login-error');
+  const users = getUsers();
+  const user  = users.find(u=>u.email.toLowerCase()===email && u.pass===pass);
+  if(!user){ err.textContent='Usuario o contraseña incorrectos.'; err.classList.add('show'); return; }
+  if(user.status==='pending'){ err.innerHTML='Tu cuenta está <strong>pendiente de activación</strong>.<br>El administrador la activará pronto.'; err.classList.add('show'); return; }
+  if(!user.active){ err.textContent='Tu cuenta está desactivada. Contacta al administrador.'; err.classList.add('show'); return; }
+  err.classList.remove('show');
+  launchApp(user);
+}
+
+function doRegistro(){
+  const name  = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('reg-pass').value.trim();
+  const area  = document.getElementById('reg-area').value;
+  const err   = document.getElementById('reg-error');
+  const suc   = document.getElementById('reg-success');
+  err.classList.remove('show'); suc.classList.remove('show');
+  if(!name||!email||!pass||!area){ err.textContent='Completa todos los campos.'; err.classList.add('show'); return; }
+  if(pass.length<6){ err.textContent='La contraseña debe tener al menos 6 caracteres.'; err.classList.add('show'); return; }
+  const users = getUsers();
+  if(users.find(u=>u.email.toLowerCase()===email)){ err.textContent='Este correo ya está registrado.'; err.classList.add('show'); return; }
+  // Asignar rol sugerido según área seleccionada
+  const rolMap = {chef:'chef',barista:'barista',mesero:'mesero',limpieza:'limpieza',gerente:'gerente',otro:'mesero'};
+  const rol = rolMap[area]||'mesero';
+  const familia = FAMILIAS[rol];
+  users.push({id:'u'+Date.now(), name, email, pass, rol, cats:familia.cats, trans:familia.trans, active:false, status:'pending'});
+  saveUsers(users);
+  suc.innerHTML = '✅ Solicitud enviada. El administrador revisará tu cuenta y te notificará cuando esté activa.';
+  suc.classList.add('show');
+  document.getElementById('reg-name').value='';
+  document.getElementById('reg-email').value='';
+  document.getElementById('reg-pass').value='';
+  document.getElementById('reg-area').value='';
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('auth-screen').style.display!=='none') doLogin();
+});
+
+function launchApp(user){
+  CU = user;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  const initials = user.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('tb-avatar').textContent = initials;
+  document.getElementById('tb-name').textContent = user.name;
+  const rp = document.getElementById('tb-role');
+  const fam = FAMILIAS[user.rol]||FAMILIAS.mesero;
+  rp.textContent = fam.label;
+  rp.className = 'role-pill '+(fam.pill||'rp-mesero');
+  buildSidebar();
+  showHome();
+}
+
+function doLogout(){
+  CU=null;
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-error').classList.remove('show');
+}
+
+/* Acceso */
+function canCat(catId){ if(!CU) return false; const f=FAMILIAS[CU.rol]; return f&&f.cats.includes(catId); }
+function canTrans(id){ if(!CU) return false; const f=FAMILIAS[CU.rol]; return f&&f.trans.includes(id); }
+function isAdmin(){ return CU&&CU.rol==='admin'; }
+
+/* ════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════ */
+let activeSub = null;
+
+function buildSidebar(){
+  const sb = document.getElementById('sidebar-inner');
+  let html = `<div class="sidebar-section">Inicio</div>
+    <div class="nav-item active" id="nav-home" onclick="showHome()"><i class="ti ti-home" style="font-size:15px;margin-right:6px;"></i>Inicio</div>
+    <div class="sidebar-section">Áreas Operativas</div>`;
+
+  ESTRUCTURA.forEach(cat=>{
+    const access = canCat(cat.id);
+    html += `<div class="cat-${cat.css}">
+      <div class="cat-header${access?'':' locked'}" id="cat-h-${cat.id}" onclick="${access?`toggleCat('${cat.id}')`:''}">
+        <span class="cat-icon">${catIcon(cat.icon)}</span>
+        <span class="cat-name">${cat.name}</span>
+        ${access?`<i class="ti ti-chevron-right cat-chevron"></i>`:`<span class="cat-lock"><i class="ti ti-lock"></i></span>`}
+      </div>
+      <div class="subcats" id="cat-s-${cat.id}">
+        ${cat.subs.map(sub=>`
+          <div class="subcat-item${access?'':' locked'}" id="sub-${sub.id}"
+            onclick="${access?`showSub('${cat.id}','${sub.id}')`:''}">
+            <div class="subcat-dot" style="background:${cat.color}"></div>
+            ${sub.name}
+          </div>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  if(canTrans('supervisor')||canTrans('alertas')||isAdmin()){
+    html += `<div class="sidebar-section">Transversal</div>`;
+    if(canTrans('supervisor')||isAdmin())
+      html += `<div class="nav-item" id="nav-supervisor" onclick="showSupervisor()"><i class="ti ti-eye" style="font-size:15px;margin-right:6px;"></i>Supervisor</div>`;
+    if(canTrans('alertas')||isAdmin())
+      html += `<div class="nav-item" id="nav-alertas" onclick="showAlerts()"><i class="ti ti-bell" style="font-size:15px;margin-right:6px;"></i>Alertas & Reportes</div>`;
+    if(isAdmin())
+      html += `<div class="nav-item" id="nav-admin" onclick="showAdmin()"><i class="ti ti-settings" style="font-size:15px;margin-right:6px;"></i>Usuarios & Roles</div>`;
+  }
+
+  sb.innerHTML = html;
+}
+
+function toggleCat(catId){
+  const subs = document.getElementById('cat-s-'+catId);
+  const head = document.getElementById('cat-h-'+catId);
+  const isOpen = subs.classList.contains('open');
+  // Cerrar todos
+  document.querySelectorAll('.subcats').forEach(s=>s.classList.remove('open'));
+  document.querySelectorAll('.cat-header').forEach(h=>h.classList.remove('open'));
+  if(!isOpen){ subs.classList.add('open'); head.classList.add('open'); }
+}
+
+function setNavActive(id){
+  document.querySelectorAll('.nav-item,.subcat-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-home')&&document.getElementById('nav-home').classList.remove('active');
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+/* ════════════════════════════════════
+   HOME
+════════════════════════════════════ */
+/* SISTEMA CALIFICACION VK */
+const MOD_PESOS={'cocina-checklist':3,'cocina-temperatura':3,'cocina-merma':3,'cocina-inocuidad':2,'cocina-produccion':2,'cocina-recetas':1,'cocina-display-sabores':2,'cocina-display-sabores':2,'barra-checklist':3,'barra-calibracion':3,'barra-merma':2,'barra-insumos':2,'barra-espresso':1,'barra-frias':1,'barra-display-sabores':2,'barra-display-sabores':2,'almacen-entradas':3,'almacen-peps':3,'almacen-inventario':2,'almacen-salidas':2,'almacen-proveedores':1,'almacen-conteo':1,'salon-checklist':3,'salon-banos':3,'salon-limpieza':2,'salon-montaje':2,'salon-mesas':1,'salon-supervisor':1,'servicio-protocolo':2,'servicio-tiempos':2,'servicio-comandas':2,'servicio-satisfaccion':2,'servicio-venta':1,'servicio-incidencias':1,'vitrinas-temperatura':3,'vitrinas-rotacion':3,'vitrinas-limpieza':2,'vitrinas-conteo':2,'vitrinas-exhibicion':1,'vitrinas-sobrantes':1};
+const MOD_CRITICOS=['cocina-checklist','cocina-temperatura','cocina-merma','barra-checklist','barra-calibracion','salon-checklist','salon-banos','almacen-entradas','almacen-peps','vitrinas-temperatura'];
+function hoyKey(){return new Date().toISOString().slice(0,10);}
+
+/* ════ VK ALERT BELL ════ */
+var _alOpen=false,_alLoaded=false;
+function toggleAlertPanel(){
+  _alOpen=!_alOpen;
+  var pan=document.getElementById('alertPanel');
+  if(pan)pan.classList.toggle('open',_alOpen);
+  if(_alOpen&&!_alLoaded)loadAlerts();
+}
+function loadAlerts(){
+  initSB();if(!vkSB)return;
+  vkSB.from('alertas').select('*')
+    .eq('fecha',new Date().toISOString().slice(0,10))
+    .order('created_at',{ascending:false}).limit(30)
+    .then(function(res){
+      _alLoaded=true;
+      var all=res.data||[];
+      var unread=all.filter(function(a){return !a.leida;});
+      renderAlerts(all);setAlertBadge(unread.length);
+    }).catch(function(){});
+}
+function renderAlerts(items){
+  var el=document.getElementById('alertList');if(!el)return;
+  if(!items||!items.length){el.innerHTML='<div class="al-empty">Sin alertas hoy ✅</div>';return;}
+  var EMJ={critica:'🚨',importante:'⚠️',informativa:'ℹ️'};
+  el.innerHTML=items.map(function(a){
+    var t=new Date(a.created_at);
+    var hm=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0');
+    return '<div class="al-item" data-alid="'+a.id+'"'+(a.leida?' style="opacity:.5"':'')+' onclick="markAlertRead(this.dataset.alid)">'+
+      '<div class="al-sev '+a.severidad+'">'+(EMJ[a.severidad]||'')+' '+a.severidad+'</div>'+
+      '<div class="al-title">'+a.titulo+'</div>'+
+      '<div class="al-msg">'+(a.mensaje||'')+'</div>'+
+      '<div class="al-time">'+hm+' · '+(a.modulo_id||'sistema')+'</div></div>';
+  }).join('');
+}
+function setAlertBadge(n){
+  var b=document.getElementById('alertBadge');if(!b)return;
+  b.style.display=n>0?'flex':'none';b.textContent=n>9?'9+':n;
+}
+function markAlertRead(id){
+  if(!vkSB)return;
+  vkSB.from('alertas').update({leida:true}).eq('id',id)
+    .then(function(){_alLoaded=false;loadAlerts();});
+}
+function insertAlerta(tipo,sev,titulo,msg,modId){
+  try{
+    initSB();if(!vkSB)return;
+    vkSB.from('alertas').insert({tipo:tipo,severidad:sev,titulo:titulo,
+      mensaje:msg,modulo_id:modId,fecha:new Date().toISOString().slice(0,10)})
+      .then(function(){
+        var cur=parseInt(document.getElementById('alertBadge')?.textContent||0);
+        setAlertBadge(cur+1);
+      });
+  }catch(e){}
+}
+function startAlertPolling(){
+  initSB();if(!vkSB)return;
+  setTimeout(function(){loadAlerts();setInterval(loadAlerts,5*60*1000);},3000);
+}
+/* ════ FIN ALERT BELL ════ */
+
+
+/* ══ STRIPE INTEGRATION ══ */
+const CJ_STRIPE_PK = 'pk_live_PENDIENTE_STRIPE_KEY'; // Mario: pega aquí tu pk_live_
+let stripeInstance = null;
+let stripeCard = null;
+
+function initStripe() {
+  if(typeof Stripe === 'undefined' || stripeInstance) return;
+  stripeInstance = Stripe(CJ_STRIPE_PK);
+  const elements = stripeInstance.elements({locale:'es-419'});
+  stripeCard = elements.create('card', {
+    style: {
+      base: { fontFamily:'Anek Odia,sans-serif', fontSize:'14px', color:'#1C1C1C' },
+      invalid: { color:'#C0392B' }
+    }
+  });
+  stripeCard.mount('#stripe-card-element');
+}
+
+function mostrarPago() {
+  document.getElementById('payScreen').style.display = 'flex';
+  setTimeout(initStripe, 300);
+}
+
+function ocultarPago() {
+  document.getElementById('payScreen').style.display = 'none';
+}
+
+async function procesarPago() {
+  const nombre = document.getElementById('payNombre').value.trim();
+  const email = document.getElementById('payEmail').value.trim();
+  const errEl = document.getElementById('payError');
+  const btnText = document.getElementById('payBtnText');
+  const btnLoad = document.getElementById('payBtnLoad');
+  const btn = document.getElementById('payBtn');
+
+  errEl.style.display = 'none';
+
+  if(!nombre || !email) {
+    errEl.textContent = 'Por favor llena todos los campos.';
+    errEl.style.display = 'block'; return;
+  }
+  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    errEl.textContent = 'Correo electrónico inválido.';
+    errEl.style.display = 'block'; return;
+  }
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoad.style.display = 'inline';
+
+  try {
+    // Crear PaymentMethod
+    const { paymentMethod, error } = await stripeInstance.createPaymentMethod({
+      type: 'card', card: stripeCard,
+      billing_details: { name: nombre, email: email }
+    });
+
+    if(error) {
+      errEl.textContent = error.message;
+      errEl.style.display = 'block';
+      btn.disabled = false; btnText.style.display = 'inline'; btnLoad.style.display = 'none';
+      return;
+    }
+
+    // Llamar al backend (Supabase Edge Function o endpoint de pago)
+    // TODO: implementar cuando se tengan las Stripe keys completas
+    console.log('PaymentMethod creado:', paymentMethod.id);
+
+    // Por ahora: simular éxito y registrar usuario
+    alert('Pago procesado. ¡Bienvenido a Corazón de Jaguar!\nTu acceso ha sido activado.');
+    ocultarPago();
+    // Aquí se registrará el usuario automáticamente después del pago
+
+  } catch(e) {
+    errEl.textContent = 'Error al procesar el pago. Intenta de nuevo.';
+    errEl.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btnText.style.display = 'inline';
+  btnLoad.style.display = 'none';
+}
+/* ══ FIN STRIPE ══ */
+
+function guardarProgreso(){var mc=document.getElementById('main-content');var checks=mc.querySelectorAll('input[type=checkbox]');var total=checks.length,hechos=[...checks].filter(c=>c.checked).length;if(!total||!activeSub)return;var pct=Math.round(hechos/total*100);var key='vk_prog_'+activeSub+'_'+hoyKey();try{localStorage.setItem(key,JSON.stringify({total:total,hechos:hechos,pct:pct,ts:Date.now()}));}catch(e){}sbUpsertProgreso(activeSub,pct,total,hechos,{})}
+function getProgreso(s){var k='vk_prog_'+s+'_'+hoyKey();try{var v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch(e){return null;}}
+function calcScoreArea(catId){var cat=ESTRUCTURA.find(c=>c.id===catId);if(!cat)return{pct:0,alerta:false};var sc=0,mx=0,al=false;cat.subs.forEach(function(sub){var p=MOD_PESOS[sub.id]||1;mx+=p*100;var pr=getProgreso(sub.id);var pct=pr?pr.pct:0;sc+=p*pct;if(MOD_CRITICOS.indexOf(sub.id)>=0&&pct<100)al=true;});return{pct:mx?Math.round(sc/mx):0,score:sc,maxScore:mx,alerta:al};}
+function calcScoreGlobal(){var t=0,m=0;ESTRUCTURA.forEach(function(cat){var a=calcScoreArea(cat.id);t+=a.score;m+=a.maxScore;});return m?Math.round(t/m):0;}
+function letraCalif(pct){if(pct>=95)return{l:'A+',c:'#2D7D1A'};if(pct>=85)return{l:'A',c:'var(--cj-accent)'};if(pct>=75)return{l:'B',c:'var(--warn)'};if(pct>=60)return{l:'C',c:'#D68000'};return{l:'D',c:'var(--danger)'};}
+function showHome(){
+  setNavActive('nav-home');
+  document.getElementById('nav-home').classList.add('active');
+  var mc=document.getElementById('main-content');
+  var accesibles=ESTRUCTURA.filter(c=>canCat(c.id));
+  var nombre=CU.name.split(' ')[0];
+  var hoy=hoyKey(),hora=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  var gl=calcScoreGlobal(),cf=letraCalif(gl);
+  var mC=0,mT=0;
+  ESTRUCTURA.forEach(function(cat){if(!canCat(cat.id))return;cat.subs.forEach(function(sub){mT++;var p=getProgreso(sub.id);if(p&&p.pct===100)mC++;});});
+  var alts=ESTRUCTURA.filter(cat=>canCat(cat.id)&&calcScoreArea(cat.id).alerta);
+  var fd=new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
+  var aC=ESTRUCTURA.map(function(cat){
+    if(!canCat(cat.id))return'';
+    var a=calcScoreArea(cat.id),c=letraCalif(a.pct);
+    var bC=a.pct===100?'var(--cj-accent)':a.pct>=60?'var(--warn)':'var(--danger)';
+    var mR=cat.subs.map(function(sub){
+      var p=getProgreso(sub.id),pct=p?p.pct:0;
+      var ec=MOD_CRITICOS.indexOf(sub.id)>=0;
+      var bg=pct===100?'rgba(139,184,57,.15)':pct>0?'rgba(176,125,32,.1)':ec?'rgba(192,57,43,.08)':'var(--bg2)';
+      var co=pct===100?'var(--cj-accent)':pct>0?'var(--warn)':ec?'var(--danger)':'var(--muted)';      var dot=ec?'<i class="ti ti-point-filled" style="font-size:7px;color:var(--danger);margin-right:3px;"></i>':'';
+      var badge='<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;min-width:36px;text-align:center;background:'+bg+';color:'+co+';">'+(pct?pct+'%':'&#8212;')+'</span>';
+      return '<div class="vk-mod-row" data-nav-cat="'+cat.id+'" data-nav-sub="'+sub.id+'" style="display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);padding:5px 2px;border-bottom:1px solid var(--border2);cursor:pointer;"><span>'+dot+sub.name+'</span>'+badge+'</div>';    }).join('');
+    return '<div style="background:'+(a.alerta?'rgba(192,57,43,.02)':'white')+';border:1.5px solid '+(a.alerta?'rgba(192,57,43,.35)':'var(--border)')+';border-radius:14px;padding:14px 16px;cursor:pointer;" class="vk-area-card" data-nav-cat="'+cat.id+'" data-nav-sub0="'+cat.subs[0].id+'">'+
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;"><div style="display:flex;align-items:center;gap:7px;"><span style="font-size:18px;">'+catIcon(cat.icon)+'</span><span style="font-size:13px;font-weight:700;color:'+cat.color+';">'+cat.name+'</span></div><div style="font-size:22px;font-weight:700;color:'+c.c+';">'+c.l+'</div></div>'+
+    '<div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;"><div style="height:6px;border-radius:4px;background:'+bC+';width:'+a.pct+'%;"></div></div>'+
+    '<div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--muted);"><span>'+a.pct+'% completado</span>'+(a.alerta?'<span style=\"color:var(--danger);font-weight:700;font-size:9px;\">CRITICO</span>':'')+'</div>'+
+    '<div style="margin-top:8px;">'+mR+'</div></div>';
+  }).join('');
+  mc.innerHTML='<div class=\"fade-in\">'+
+  '<div style=\"display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px;\">'+
+  '<div><h2 style=\"font-size:22px;font-weight:700;color:var(--cj);\">Hola, '+nombre+'</h2><p style=\"font-size:13px;color:var(--muted);margin-top:3px;\">'+fd+' · Turno '+hora+'</p></div>'+
+  '<button onclick=\"showHome()\" style=\"background:var(--bg2);border:1.5px solid var(--border);border-radius:8px;padding:7px 13px;font-size:11px;cursor:pointer;font-family:var(--font);color:var(--muted);\"><i class=\"ti ti-refresh\" style=\"font-size:13px;margin-right:4px;\"></i>Actualizar</button>'+
+  '</div>'+
+  (alts.length?'<div style=\"background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.25);border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--danger);\"><i class=\"ti ti-alert-triangle\" style=\"font-size:18px;flex-shrink:0;\"></i><strong style=\"margin-right:4px;\">Atencion:</strong>'+alts.map(a=>a.name).join(', ')+' con modulos criticos sin completar.</div>':'')+
+  '<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;\">'+
+  '<div style=\"background:white;border:2px solid '+cf.c+'50;border-radius:14px;padding:16px;text-align:center;\"><div style=\"font-size:38px;font-weight:700;color:'+cf.c+';line-height:1;margin-bottom:4px;\">'+cf.l+'</div><div style=\"font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);\">Calificacion</div><div style=\"font-size:11px;color:var(--muted);margin-top:3px;\">'+gl+'% del turno</div></div>'+
+  '<div style=\"background:white;border:1.5px solid var(--border);border-radius:14px;padding:16px;text-align:center;\"><div style=\"font-size:32px;font-weight:700;color:var(--cj);line-height:1;margin-bottom:4px;\">'+mC+'<span style=\"font-size:16px;color:var(--muted);\">/'+mT+'</span></div><div style=\"font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);\">Modulos 100%</div><div style=\"font-size:11px;color:var(--muted);margin-top:3px;\">completados hoy</div></div>'+
+  '<div style=\"background:white;border:1.5px solid var(--border);border-radius:14px;padding:16px;text-align:center;\"><div style=\"font-size:32px;font-weight:700;color:'+(alts.length?'var(--danger)':'var(--cj-accent)')+';line-height:1;margin-bottom:4px;\">'+alts.length+'</div><div style=\"font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);\">Alertas criticas</div><div style=\"font-size:11px;color:var(--muted);margin-top:3px;\">'+(alts.length?'requieren atencion':'todo en orden')+'</div></div>'+
+  '<div style=\"background:white;border:1.5px solid var(--border);border-radius:14px;padding:16px;text-align:center;\"><div style=\"font-size:32px;font-weight:700;color:var(--cj-dark);line-height:1;margin-bottom:4px;\">'+accesibles.length+'</div><div style=\"font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);\">Areas activas</div><div style=\"font-size:11px;color:var(--muted);margin-top:3px;\">'+accesibles.reduce(function(s,c){return s+c.subs.length;},0)+' modulos</div></div>'+
+  '</div>'+
+  '<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:12px;\">'+aC+'</div></div>';
+  triggerFades();
+  // Event delegation — dashboard cards sin onclick inline
+  (function(){
+    var mc2=document.getElementById('main-content');
+    mc2.addEventListener('click',function(e){
+      var m=e.target.closest('.vk-mod-row');
+      if(m){e.stopPropagation();var c=m.getAttribute('data-nav-cat'),s=m.getAttribute('data-nav-sub');if(c&&s){toggleCat(c);showSub(c,s);}return;}
+      var a=e.target.closest('.vk-area-card');
+      if(a){var c=a.getAttribute('data-nav-cat'),s=a.getAttribute('data-nav-sub0');if(c&&s){toggleCat(c);showSub(c,s);}}
+    },{once:true});
+  })();
+}
+
+/* ════════════════════════════════════
+   RENDERIZADOR POR SUBCATEGORÍA
+════════════════════════════════════ */
+function showSub(catId, subId){
+  if(!canCat(catId)){ renderDenied(); return; }
+  activeSub = subId;
+  setNavActive('sub-'+subId);
+  // Asegurar que el cat esté abierto
+  const subs = document.getElementById('cat-s-'+catId);
+  const head = document.getElementById('cat-h-'+catId);
+  if(subs&&!subs.classList.contains('open')){ subs.classList.add('open'); head&&head.classList.add('open'); }
+  const cat = ESTRUCTURA.find(c=>c.id===catId);
+  const sub = cat?.subs.find(s=>s.id===subId);
+  const mc = document.getElementById('main-content');
+  // Dispatch por subcategoría
+  const renders = {
+    'cocina-checklist':   ()=>renderChecklist(mc,cat,sub,'Apertura · Cambio de Turno · Cierre','cocina',[
+      {sec:'Apertura General',items:['Marcar entrada y uniformarse.','Encender equipos: hornos, refrigeradores, congeladores.','Verificar temperaturas (bitácora inocuidad).','Revisar mise en place del día.','Sanitizar superficies y área de trabajo.','Colocar bolsas de basura.']},
+      {sec:'Durante Operación',items:['Registrar temperatura de alimentos.','Verificar PEPS en refrigeradores.','Controlar gramajes según receta.','Documentar merma en formato.'],dark:true},
+      {sec:'Cierre de Cocina',items:['Enfriamiento rápido de alimentos preparados.','Etiquetar con fecha y hora todos los recipientes.','Limpiar y desinfectar equipos y superficies.','Guardar insumos en refrigeración o almacén seco.','Cerrar gas y apagar equipos.','Firmar bitácora de inocuidad del día.'],dark:true},
+    ]),
+    'cocina-temperatura': ()=>renderTempFoto(mc,cat,sub),
+    'cocina-produccion':  ()=>renderProduccion(mc,cat,sub),
+    'cocina-merma':       ()=>renderMerma(mc,cat,sub),
+    'cocina-inocuidad':   ()=>renderChecklist(mc,cat,sub,'Inocuidad · PEPS · Trazabilidad','cocina',[
+      {sec:'Verificación PEPS',items:['Revisar fechas de caducidad en todos los productos.','Colocar productos más viejos al frente.','Retirar y registrar productos caducados.','Verificar etiquetas con fecha de elaboración y caducidad.']},
+      {sec:'Higiene de Manos',items:['Lavado de manos antes de manipular alimentos.','Uso de guantes para carnes crudas.','Cambio de guantes entre áreas diferentes.','Sin joyería durante la manipulación de alimentos.']},
+      {sec:'Control de Plagas',items:['Inspección visual de zona de almacenamiento.','Sin evidencia de plagas en cocina.','Trampas de monitoreo revisadas.','Reportar cualquier hallazgo inmediatamente.'],dark:true},
+    ]),
+    'cocina-recetas': ()=>renderChecklist(mc,cat,sub,'Recetario Operativo','cocina',[{sec:'Desayunos y Bowls',items:['Bowl de proteina — pollo grillado, quinoa, verduras asadas, salsa verde.','Parfait granola — yogurt griego, granola artesanal, fruta fresca, miel.','Avena cocida — leche de avena, platano, canela, nueces.','Tostadas de aguacate — pan artesanal, aguacate, hojuelas de chile, limon.']},{sec:'Snacks y Ensaladas',items:['Ensalada verde — lechuga romana, pepino, betabel, vinagreta.','Bowl de fruta — mango, papaya, melon, jicama, limon y chile.','Wrap de pollo — tortilla integral, pollo, lechuga, jitomate, mostaza.','Guacamole — 3 aguacates, jitomate, cebolla, cilantro.']},{sec:'Postres y Horneados',items:['Panque de platano — harina de avena, huevo, aceite de coco.','Galletas de avena — avena, mantequilla, azucar moscabado, chips chocolate.','Tarta limon — base de galleta, crema de limon, merengue italiano.'],dark:true}]),
+    'barra-checklist':    ()=>renderChecklist(mc,cat,sub,'Apertura · Cambio de Turno · Cierre','barra',[
+      {sec:'Apertura General',items:['Marcar entrada y uniformarse.','Prender máquina de espresso.','Prender molino y rellenarlo.','Abrir paso del molino.','Armar área: montar tapetes, revisar cerámica.','Barrer y trapear.','Colocar bolsa de basura.']},
+      {sec:'Insumos & Equipos',items:['Checar insumos (85 y 86).','Rellenar teteras y encenderlas.','Confirmar báscula cargada.']},
+      {sec:'Calibración Espresso',items:['Calibración espresso y llenado de formato.','1. Tasted — 2. Ajuste si no ideal — 3. Ajuste II.']},
+      {sec:'Cambio de Turno',items:['Operación continua — revisión muertos, limpieza e insumos.','Rellenar insumos: té, tisana, molino, leche, hielo.','Lavar y ordenar losa restante.','Limpiar área y vaciar gabacera.','Revisar basura. Limpiar grupos y maneral.'],dark:true},
+      {sec:'Cierre Final',items:['Cerrar paso tolva molino (1 hr antes).','Limpiar máquina con rinzar / cafiza.','Desmontar tolva — guardar café restante.','Limpiar exterior del molino.','Barrer y trapear. Sacar basura. Apagar equipos.'],dark:true},
+    ]),
+    'barra-calibracion':  ()=>renderCalibration(mc,cat,sub),
+    'barra-merma':        ()=>renderMerma(mc,cat,sub),
+    'barra-espresso': ()=>renderChecklist(mc,cat,sub,'Cafe Espresso — Parametros','barra',[{sec:'Parametros de Extraccion',items:['Dosis: 18-19 g. Rendimiento: 36-40 g. Tiempo: 25-30 seg.','Temperatura de agua: 93-95 C. Presion: 9 bar.','Molienda: ajustar diario segun clima y humedad.','Calibracion: probar shot antes de servir al cliente.']},{sec:'Preparaciones Base',items:['Espresso — 18 g dosis, 36 g rendimiento, 28 seg.','Americano — espresso + agua caliente 150 ml.','Cappuccino — espresso + leche texturizada 120 ml, espuma densa.','Latte — espresso + leche vaporizada 200 ml, espuma fina.']},{sec:'Control de Calidad',items:['Probar primer shot de apertura y registrar parametros.','Verificar presion de maquina cada turno.','Purgar grupos antes de cada extraccion.','Registrar desviaciones en formato de calibracion.'],dark:true}]),
+    'barra-frias': ()=>renderChecklist(mc,cat,sub,'Bebidas Frias y Matcha','barra',[{sec:'Matcha y Te',items:['Matcha latte frio — 4 g matcha, 30 ml agua 80C, batir, 200 ml leche fria, hielo.','Matcha latte caliente — misma base con leche vaporizada.','Cold brew matcha — matcha + agua fria 12 hrs refrigeracion.','London Fog frio — te earl grey, lavanda, leche de avena, hielo.']},{sec:'Lattes Frios',items:['Lavender latte — espresso, sirope lavanda, leche fria, hielo.','Chai latte frio — concentrado chai, leche fria, canela, hielo.','Latte de curcuma — curcuma, pimienta, leche vegetal, miel, hielo.','Horchata coffee — espresso, horchata casera, canela, hielo.']},{sec:'Cold Brew',items:['Cold brew: 100 g cafe grueso + 800 ml agua fria, 16-20 hrs, colar.','Ratio servicio: 150 ml cold brew + 50 ml agua + hielo.','Almacenar cold brew maximo 72 hrs en refrigeracion.'],dark:true}]),
+    'barra-insumos':      ()=>renderChecklist(mc,cat,sub,'Control de Insumos de Barra','barra',[
+      {sec:'Stock AM',items:['Leche entera: ___ lt · Mínimo 5 lt','Leche de avena: ___ lt · Mínimo 2 lt','Café en grano: ___ kg · Mínimo 0.5 kg','Matcha en polvo: ___ gr · Mínimo 100 gr','Jarabes y azúcares: stock completo ✓','Hielo: hielera llena ✓']},
+      {sec:'Stock PM / Reposición',items:['Leche entera: ___ lt','Leche de avena: ___ lt','Café en grano: ___ kg','Solicitud de reposición enviada a almacén: ✓'],dark:true},
+    ]),
+    'almacen-inventario': ()=>renderInventarioGeneral(mc,cat,sub),
+    'almacen-entradas':   ()=>renderEntradas(mc,cat,sub),
+    'almacen-salidas':    ()=>renderChecklist(mc,cat,sub,'Salidas y Requisiciones','almacen',[
+      {sec:'Requisición del Día',items:['Área solicitante: ___','Producto solicitado y cantidad: ___','Verificar stock disponible antes de surtir.','Firma de quien recibe: ___','Actualizar registro de inventario inmediatamente.']},
+    ]),
+    'almacen-peps':       ()=>renderChecklist(mc,cat,sub,'PEPS / Caducidades','almacen',[
+      {sec:'Revisión Diaria',items:['Verificar fecha de todos los productos refrigerados.','Retirar y documentar productos próximos a caducar.','Rotar productos — los más antiguos al frente.','Etiquetar todos los productos con fecha de entrada.','Reportar merma por caducidad en bitácora.']},
+    ]),
+    'almacen-proveedores': ()=>renderChecklist(mc,cat,sub,'Directorio de Proveedores','almacen',[{sec:'Proveedores Activos',items:['Cafe verde — especialidad, pedido lunes y jueves.','Leche y lacteos — entrega diaria AM, verificar temperatura.','Frutas y verduras — mercado local, pedido dia previo, 7 AM.','Panaderia artesanal — entrega diaria 6:30 AM, contar piezas.','Insumos secos — pedido semanal, revisar fechas de caducidad.']},{sec:'Protocolo de Recepcion',items:['Verificar factura contra pedido antes de firmar.','Revisar temperatura de refrigerados (max 4 C).','Inspeccionar empaques sin golpes ni humedad.','Rechazar producto fuera de especificacion y documentar.','Ingresar en inventario inmediatamente.']},{sec:'Evaluacion Mensual',items:['Calificar puntualidad, calidad y precio cada mes.','Registrar incidencias: faltantes, retrasos, calidad baja.','Mantener minimo 2 proveedores alternativos por categoria.','Revisar precios cada trimestre.'],dark:true}]),
+    'almacen-conteo':     ()=>renderInventarioGeneral(mc,cat,sub),
+    'salon-checklist':    ()=>renderChecklist(mc,cat,sub,'Apertura · Cambio de Turno · Cierre','salon',[
+      {sec:'Apertura General',items:['Marcar entrada y uniformarse.','Habilitar luces del salón y mostrador.','Sacar bancas a la entrada.','Barrer y trapear salón completo.','Habilitar punto de venta — limpiar pantalla.','Prueba de terminales bancarias.']},
+      {sec:'Baños & Servicio',items:['Habilitar baños — papel, jabón, bolsa.','Habilitar área de servicio (cubiertos, servilletas, popotes).','Checar stock completo en estaciones.']},
+      {sec:'Cierre',items:['Cerrar puertas del establecimiento.','Guardar bancas del exterior.','Barrer y trapear salón y mostrador.','Limpiar mesas y sillas.','Sacar basura. Cierre en sistema. Apagar luces.'],dark:true},
+    ]),
+    'salon-banos':        ()=>renderBanos(mc,cat,sub),
+    'salon-limpieza':     ()=>renderChecklist(mc,cat,sub,'Limpieza de Salón','salon',[
+      {sec:'Limpieza Diaria',items:['Barrer y trapear todo el salón.','Limpiar y desinfectar todas las mesas.','Limpiar sillas (estructura y asiento).','Limpiar mostrador y área de servicio.','Desinfectar picaportes y superficies de contacto frecuente.']},
+      {sec:'Limpieza Profunda Semanal',items:['Limpiar lámparas y ventiladores.','Limpiar paredes y rodapiés.','Desinfectar profundamente baños (incluye azulejos y juntas).','Limpiar vitrinas y exhibidores.','Revisar estado de plantas y elementos decorativos.'],dark:true},
+    ]),
+    'salon-montaje':      ()=>renderChecklist(mc,cat,sub,'Montaje y Mise en Place','salon',[
+      {sec:'Montaje de Mesas',items:['Mesas alineadas y con distancia adecuada.','Individuales limpios y bien colocados.','Servilletas dobladas en su lugar.','Saleros y pimenteros completos y limpios.','Menús limpios y sin páginas dañadas.']},
+      {sec:'Estaciones de Servicio',items:['Cubiertos surtidos y organizados.','Popotes y agitadores disponibles.','Servilletas de respaldo en estación.','Bandejas limpias y en su lugar.']},
+    ]),
+    'salon-mesas': ()=>renderChecklist(mc,cat,sub,'Control de Mesas','salon',[{sec:'Asignacion y Estado',items:['Mapa de mesas actualizado al inicio de cada turno.','Registrar hora de llegada por mesa.','Comunicar tiempo de espera estimado al cliente.','Maximo 5 min de espera para toma de orden.','Rotacion objetivo: 45 min por mesa en hora pico.']},{sec:'Durante el Servicio',items:['Monitorear que mesas no esten mas de 10 min sin atencion.','Coordinar cocina y barra para evitar salidas descoordinadas.','Limpiar mesa en maximo 3 min tras salida del cliente.','Comunicar mesa disponible al equipo inmediatamente.']},{sec:'Registro del Turno',items:['Mesas atendidas: ___. Tiempo promedio: ___ min.','Incidencias registradas: ___.','Capacidad maxima alcanzada: ___.','Observaciones del turno: ___.'],dark:true}]),
+    'salon-supervisor':   ()=>renderSupervisor(mc,cat,sub),
+    'servicio-protocolo': ()=>renderChecklist(mc,cat,sub,'Protocolo de Atención al Cliente','servicio',[
+      {sec:'Bienvenida',items:['Recibir al cliente en máximo 30 segundos de su llegada.','Saludo cordial con mirada y nombre si es cliente frecuente.','Acompañar a la mesa disponible de su elección.','Presentar menú y especificar producto del día.','Ofrecer agua de cortesía inmediatamente.']},
+      {sec:'Durante el Servicio',items:['Confirmar pedido repitiendo los ítems.','Informar tiempo de espera estimado.','Estar disponible sin ser intrusivo.','Preguntar satisfacción al entregar el pedido.']},
+      {sec:'Despedida',items:['Agradecer visita al momento del pago.','Invitar a regresar con sinceridad.','Registrar cualquier incidencia o comentario.'],dark:true},
+    ]),
+    'servicio-tiempos': ()=>renderChecklist(mc,cat,sub,'Tiempos Estandar de Servicio','servicio',[{sec:'Tiempos Objetivo',items:['Bienvenida y menu: maximo 2 min desde que el cliente se sienta.','Toma de orden: maximo 5 min desde la bienvenida.','Entrega de bebidas: maximo 5 min desde la orden.','Entrega de alimentos: maximo 12 min desayuno, 15 min comida.','Presentacion de cuenta: maximo 2 min desde que se solicita.']},{sec:'Registro del Dia',items:['Tiempo promedio bienvenida: ___ min.','Tiempo promedio entrega bebida: ___ min.','Tiempo promedio entrega alimento: ___ min.','Mesas dentro del estandar: ___ / ___.','Mesas fuera del estandar (motivo): ___.']},{sec:'Acciones Correctivas',items:['Si cocina supera 15 min: avisar y disculparse con el cliente.','Si espera supera 5 min: reconocimiento inmediato.','Registrar retrasos con causa en formato de incidencias.'],dark:true}]),
+    'servicio-satisfaccion': ()=>renderChecklist(mc,cat,sub,'Satisfaccion del Cliente y NPS','servicio',[{sec:'Puntos de Contacto',items:['Preguntar satisfaccion 3 min despues del primer plato.','Revisita a la mesa: Todo esta bien?','Invitar comentario al momento del pago.','Registrar feedback positivo y negativo del turno.','Informar a cocina sobre comentarios relevantes.']},{sec:'Registro de Feedback',items:['Comentarios positivos del turno: ___.','Quejas recibidas: ___. Motivo: ___.','Acciones tomadas: ___. Seguimiento: ___.']},{sec:'Indicadores',items:['Meta NPS: 70+. Google reviews objetivo: 4.5+.','Clientes frecuentes identificados: ___.','Propinas promedio: ___% del ticket.'],dark:true}]),
+    'servicio-comandas': ()=>renderChecklist(mc,cat,sub,'Comandas y Pedidos','servicio',[{sec:'Toma de Orden',items:['Anotar numero de mesa y numero de personas.','Repetir la orden en voz alta para confirmar.','Especificar modificaciones: sin azucar, sin gluten, temperatura.','Senalar tiempo estimado si hay producto agotado.','Ingresar comanda en sistema inmediatamente.']},{sec:'Seguimiento',items:['Verificar que la comanda fue recibida en cocina y barra.','Comunicar si algun item tardara mas de lo normal.','Entregar bebidas primero, alimentos despues.','Confirmar que el pedido es completo antes de retirarte.']},{sec:'Cierre de Comanda',items:['Verificar ticket antes de presentar al cliente.','Ofrecer extra: postre, segundo cafe, bebida.','Confirmar metodo de pago: efectivo, tarjeta o QR.','Registrar total en corte de caja.'],dark:true}]),
+    'servicio-venta':     ()=>renderChecklist(mc,cat,sub,'Venta Sugerida','servicio',[
+      {sec:'Técnicas de Sugerencia',items:['Conocer el menú completo — precios, ingredientes, alérgenos.','Sugerir el producto del día al inicio del servicio.','Ofrecer maridaje entre bebida y platillo.','Mencionar postres antes del cierre de cuenta.','Sugerir para llevar si el cliente menciona que le gustó algo.']},
+    ]),
+    'servicio-incidencias': ()=>renderChecklist(mc,cat,sub,'Incidencias y Resolucion','servicio',[{sec:'Tipos de Incidencia',items:['Queja de alimento: temperatura, preparacion, presentacion.','Queja de servicio: tiempo de espera, atencion, error en orden.','Accidente: derrame, ruptura de loza, dano a cliente.','Error de cobro: monto incorrecto, cargo duplicado.']},{sec:'Protocolo de Resolucion',items:['Escuchar sin interrumpir. Validar la experiencia del cliente.','Disculparse genuinamente, nunca justificar ni debatir.','Ofrecer solucion inmediata: reposicion, cortesia, descuento.','Escalar al supervisor si el cliente no queda conforme.','Registrar incidencia antes de terminar el turno.']},{sec:'Registro',items:['Fecha: ___. Turno: ___. Responsable: ___.','Tipo: ___. Descripcion: ___.','Solucion aplicada: ___. Cliente conforme: Si o No.'],dark:true}]),
+    'vitrinas-exhibicion':()=>renderChecklist(mc,cat,sub,'Exhibición y Montaje de Vitrina','vitrinas',[
+      {sec:'Montaje AM',items:['Limpiar vitrina por dentro antes de colocar producto.','Colocar producto con etiqueta de precio visible.','Productos más llamativos al nivel de los ojos.','Respetar temperatura de vitrina refrigerada: 4–8 °C.','Colocar carteles de ingredientes y alérgenos.']},
+      {sec:'Durante el Día',items:['Reponer producto cuando quede menos del 30% de stock.','Retirar producto que pierda presentación.','Limpiar vidrios cada 2 horas o cuando sea necesario.','Verificar etiquetas de precio vigentes.']},
+    ]),
+    'vitrinas-conteo':    ()=>renderConteoVitrinas(mc,cat,sub),
+    'vitrinas-rotacion':  ()=>renderChecklist(mc,cat,sub,'Rotación y Caducidades de Vitrina','vitrinas',[
+      {sec:'Revisión de Caducidades',items:['Revisar fecha de elaboración de todos los productos.','Retirar productos que superen el tiempo de vida útil.','Registrar productos retirados en bitácora de merma.','Los productos más recientes van atrás de la vitrina.','Nunca mezclar productos de diferentes fechas sin identificar.']},
+    ]),
+    'vitrinas-limpieza':  ()=>renderChecklist(mc,cat,sub,'Limpieza de Vitrina','vitrinas',[
+      {sec:'Limpieza Diaria',items:['Retirar todo el producto con guantes.','Limpiar vidrios internos con alcohol al 70%.','Limpiar bandejas y soportes internos.','Revisar y limpiar el sello de la puerta.','Reponer producto limpio con etiqueta.','Limpiar vidrio exterior con líquido antigrasa.']},
+    ]),
+    'vitrinas-sobrantes': ()=>renderSobrantesVitrinas(mc,cat,sub),
+    'vitrinas-temperatura':()=>renderChecklist(mc,cat,sub,'Control de Temperatura de Vitrina','vitrinas',[
+      {sec:'Registro de Temperaturas',items:['Vitrina refrigerada 1: ___ °C · Rango: 4–8 °C','Vitrina refrigerada 2: ___ °C · Rango: 4–8 °C','Vitrina seca (pan): ___ °C · Temperatura ambiente','Registrar temperatura cada 2 horas.','Reportar desviación inmediatamente al supervisor.']},
+    ]),
+    'cocina-display-sabores': ()=>renderDisplaySabores(mc,cat,sub,'cocina'),
+    'barra-display-sabores':  ()=>renderDisplaySabores(mc,cat,sub,'barra'),
+  };
+  const renderFn = renders[subId];
+  if(renderFn) renderFn();
+  else renderComingSoon(mc,cat,sub);
+}
+
+/* ════════════════════════════════════
+   RENDERS ESPECIALES
+════════════════════════════════════ */
+function renderChecklist(el,cat,sub,subtitle,cls,secciones){
+  const hdr = `<div class="fp fade-in">
+    <div class="fp-head ${cls}">
+      <div><div class="fp-title">${catIcon(cat.icon)} ${sub.name}</div><div class="fp-sub">${subtitle}</div></div>
+      <div class="fp-acts">
+        <button class="btn btn-ghost btn-sm" onclick="limpiarChecks()">Limpiar</button>
+        <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button>
+      </div>
+    </div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date"></div>
+        <div class="meta-f"><label>Turno</label><input type="text" placeholder="AM / PM"></div>
+        <div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre"></div>
+        <div class="meta-f"><label>Supervisor</label><input type="text" placeholder="Nombre"></div>
+      </div>`;
+  const cuerpo = secciones.map(s=>`
+    <div class="cl-ban" style="background:${s.dark?'var(--cj-dark)':cat.color}">
+      <span>${s.sec}</span>
+      <button class="btn btn-ghost btn-sm" style="color:white;border-color:rgba(255,255,255,.3);font-size:9px;" onclick="addClRow(this)">+ fila</button>
+    </div>
+    <table class="cl-table">
+      <thead><tr><th style="width:30px;">No.</th><th>Tarea</th><th style="width:30px;text-align:center;">✓</th><th style="width:28px;"></th></tr></thead>
+      <tbody>${s.items.map((item,i)=>`<tr class="cl-row">
+        <td class="cl-num">${i+1}</td>
+        <td><input class="cl-inp" type="text" value="${item.replace(/"/g,'&quot;')}" placeholder="Tarea..."></td>
+        <td class="cl-chk"><input type="checkbox" onchange="guardarProgreso()"></td>
+        <td class="cl-del"><button onclick="this.closest('tr').remove();renumCl(this);guardarProgreso()">✕</button></td>
+      </tr>`).join('')}</tbody>
+    </table>`).join('');
+  el.innerHTML = hdr+cuerpo+`</div></div>`;
+  triggerFades();
+}
+
+function addClRow(btn){
+  const tbody = btn.closest('.fp-body').querySelector('tbody:last-of-type')||btn.parentElement.nextElementSibling?.querySelector('tbody');
+  // Encontrar el tbody correcto (el que sigue al banner que contiene el botón)
+  const ban = btn.closest('.cl-ban');
+  const table = ban?.nextElementSibling;
+  const tb = table?.querySelector('tbody');
+  if(!tb) return;
+  const n = tb.children.length+1;
+  const tr = document.createElement('tr');
+  tr.className='cl-row';
+  tr.innerHTML=`<td class="cl-num">${n}</td><td><input class="cl-inp" type="text" placeholder="Nueva tarea..."></td><td class="cl-chk"><input type="checkbox"></td><td class="cl-del"><button onclick="this.closest('tr').remove()">✕</button></td>`;
+  tb.appendChild(tr);
+  tr.querySelector('input[type=text]').focus();
+}
+function renumCl(btn){/* renumerar si se quiere */}
+function limpiarChecks(){ document.querySelectorAll('.cl-chk input').forEach(c=>c.checked=false); }
+
+function renderProduccion(el,cat,sub){
+  const dias=['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
+  const ths=`<th style="text-align:left;padding-left:8px;width:160px;background:var(--cj);color:white;font-size:9px;font-family:var(--mono);letter-spacing:1px;padding:7px;">Producto</th>${dias.map(d=>`<th style="width:52px;background:var(--cj);color:white;font-size:9px;font-family:var(--mono);padding:7px;text-align:center;">${d}</th>`).join('')}<th style="width:58px;background:var(--cj-dark);color:white;font-size:9px;font-family:var(--mono);padding:7px;text-align:center;">TOTAL</th>`;
+  const makeRow=p=>`<tr>${['','','','','','','',''].map((_,i)=>i===0?`<td style="border:1px solid var(--border2);padding:0 8px;font-size:13px;height:25px;"><input style="width:100%;border:none;background:transparent;font-size:13px;height:25px;" type="text" value="${p||''}" placeholder="Producto..."></td>`:`<td style="border:1px solid var(--border2);"><input style="width:100%;border:none;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;height:25px;" type="text" placeholder=""></td>`).join('')}<td style="border:1px solid var(--border2);background:var(--cocina-bg);"><input style="width:100%;border:none;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;height:25px;font-weight:700;color:var(--cj);" type="text" placeholder="0"></td></tr>`;
+  const makeBlock=(titulo,prods,tId)=>`
+    <div class="cl-ban" style="background:var(--cj);margin-top:12px;">${titulo}</div>
+    <table class="inv-table"><thead><tr>${ths}</tr></thead>
+    <tbody id="${tId}">${prods.map(p=>makeRow(p)).join('')}</tbody></table>
+    <button class="add-btn" onclick="addProdRow('${tId}')">+ Agregar producto</button>`;
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head cocina">
+      <div><div class="fp-title"><i class="ti ti-tools-kitchen-2"></i> ${sub.name}</div><div class="fp-sub">Matriz de Producción y Entrega</div></div>
+      <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button>
+    </div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Semana del</label><input type="date"></div>
+        <div class="meta-f"><label>Al</label><input type="date"></div>
+        <div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre"></div>
+        <div class="meta-f"><label>Validación</label><input type="text" placeholder="Firma salida"></div>
+      </div>
+      ${makeBlock('I. Pan Salado y Corteza',['Hogaza (Pre-fermento)','Ciabatta','Baguette'],'pb-pan')}
+      ${makeBlock('II. Pan Dulce — Viennoiserie',['Croissant Clásico','Chocolatín','Croissant Almendra','Roll de Canela'],'pb-vien')}
+      ${makeBlock('III. Postres y Pastelería',['Bowl de Proteína','Panqué de Plátano (Reb.)','Panqué de Plátano (Loaf)','Parfait Granola & Fruta','Tarta Limón','Galletas'],'pb-post')}
+    </div>
+  </div>`;
+  triggerFades();
+}
+function addProdRow(tbId){
+  const tb=document.getElementById(tbId);if(!tb)return;
+  const dias=7;
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td style="border:1px solid var(--border2);padding:0;"><input style="width:100%;border:none;background:transparent;padding:0 8px;font-size:13px;height:25px;" type="text" placeholder="Producto..."></td>${Array(dias).fill(0).map(()=>`<td style="border:1px solid var(--border2);"><input style="width:100%;border:none;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;height:25px;" type="text" placeholder=""></td>`).join('')}<td style="border:1px solid var(--border2);background:var(--cocina-bg);"><input style="width:100%;border:none;background:transparent;text-align:center;font-family:var(--mono);font-size:12px;height:25px;font-weight:700;color:var(--cj);" type="text" placeholder="0"></td>`;
+  tb.appendChild(tr);tr.querySelector('input').focus();
+}
+
+function renderMerma(el,cat,sub){
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head ${cat.id}" style="border-color:${cat.color}">
+      <div><div class="fp-title" style="color:${cat.color}">${catIcon(cat.icon)} ${sub.name}</div><div class="fp-sub">Registro de merma y producto no conforme</div></div>
+      <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button>
+    </div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date"></div>
+        <div class="meta-f"><label>Turno</label><input type="text" placeholder="AM / PM"></div>
+        <div class="meta-f"><label>Área</label><input type="text" value="${cat.name}"></div>
+        <div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre"></div>
+      </div>
+      <table class="inv-table">
+        <thead><tr>
+          <th style="text-align:left;padding-left:8px;background:${cat.color};width:180px;">Producto</th>
+          <th style="background:${cat.color};width:80px;">Cantidad</th>
+          <th style="background:${cat.color};width:90px;">Unidad</th>
+          <th style="background:${cat.color};width:120px;">Causa</th>
+          <th style="background:${cat.color};">Observaciones</th>
+          <th style="background:var(--cj-dark);width:28px;"></th>
+        </tr></thead>
+        <tbody id="merma-tb">
+          ${[1,2,3,4,5].map(i=>`<tr class="cl-row">
+            <td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Producto..."></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+            <td style="border:1px solid var(--border2);">
+              <select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);">
+                <option>kg</option><option>lt</option><option>pz</option><option>gr</option>
+              </select>
+            </td>
+            <td style="border:1px solid var(--border2);">
+              <select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);">
+                <option>Caducidad</option><option>Error prep.</option><option>Accidente</option><option>Devolución</option><option>Otro</option>
+              </select>
+            </td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Notas..."></td>
+            <td style="border:1px solid var(--border2);text-align:center;"><button class="cl-del" style="background:none;border:none;color:var(--dim);cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <button class="add-btn" onclick="addMermaRow()">+ Agregar ítem</button>
+
+      <!-- CIERRE DE TURNO -->
+      <div id="merma-cierre-wrap" style="margin-top:18px;padding:14px 16px;background:var(--bg2);border-radius:10px;border:1.5px solid var(--border);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Cierre de Turno</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <input type="checkbox" id="merma-sin-merma" style="width:15px;height:15px;accent-color:var(--cj);" onchange="toggleSinMerma(this)">
+          <label for="merma-sin-merma" style="font-size:13px;color:var(--text);cursor:pointer;">Sin merma en este turno — confirmo que no hubo producto no conforme</label>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div><label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:4px;">Firma responsable</label>
+            <input type="text" id="merma-firma-resp" placeholder="Nombre completo" style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13px;font-family:var(--font);"></div>
+          <div><label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:4px;">Firma supervisor</label>
+            <input type="text" id="merma-firma-sup" placeholder="Nombre del supervisor" style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;font-size:13px;font-family:var(--font);"></div>
+        </div>
+        <div id="merma-alerta" style="display:none;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--danger);margin-bottom:10px;"></div>
+        <button onclick="cerrarTurnoMerma()" style="width:100%;background:var(--cj);color:var(--cj-orange);border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;letter-spacing:.5px;">Confirmar y cerrar turno</button>
+        <div id="merma-ok" style="display:none;background:rgba(139,184,57,.12);border:1px solid rgba(139,184,57,.3);border-radius:8px;padding:12px;font-size:13px;color:var(--cj);margin-top:10px;text-align:center;font-weight:600;">Turno cerrado correctamente</div>
+      </div>
+    </div>
+  </div>`;
+  triggerFades();
+}
+
+function toggleSinMerma(cb){
+  const rows = document.querySelectorAll('#merma-tb input[type="text"]');
+  rows.forEach(r => r.disabled = cb.checked);
+}
+
+function cerrarTurnoMerma(){
+  const alerta = document.getElementById('merma-alerta');
+  const ok = document.getElementById('merma-ok');
+  const sinMerma = document.getElementById('merma-sin-merma').checked;
+  const firma = document.getElementById('merma-firma-resp').value.trim();
+  const sup = document.getElementById('merma-firma-sup').value.trim();
+  alerta.style.display='none'; ok.style.display='none';
+
+  // Validar firmas
+  if(!firma || !sup){
+    alerta.textContent='Falta firma del responsable o del supervisor para cerrar el turno.';
+    alerta.style.display='block'; return;
+  }
+
+  if(!sinMerma){
+    // Validar que al menos 1 fila tiene producto documentado
+    const filas = document.querySelectorAll('#merma-tb tr');
+    let documentadas = 0;
+    filas.forEach(tr => {
+      const prod = tr.querySelector('input[type="text"]');
+      if(prod && prod.value.trim() !== '') documentadas++;
+    });
+    if(documentadas === 0){
+      alerta.textContent='Debes registrar al menos 1 ítem de merma, o marcar "Sin merma en este turno".';
+      alerta.style.display='block'; return;
+    }
+  }
+
+  // Guardar en localStorage
+  const turno = {
+    fecha: document.querySelector('#main-content input[type=date]')?.value || new Date().toLocaleDateString('es-MX'),
+    responsable: firma, supervisor: sup, sinMerma,
+    timestamp: new Date().toISOString(), cerrado: true
+  };
+  try{ localStorage.setItem('vk_merma_cierre_'+turno.fecha, JSON.stringify(turno)); }catch(e){}
+  ok.textContent = sinMerma
+    ? 'Turno cerrado sin merma. Firmado por ' + firma + ' · Supervisor: ' + sup
+    : 'Turno cerrado con merma documentada. Firmado por ' + firma + ' · Supervisor: ' + sup;
+  ok.style.display='block';
+  document.querySelector('#main-content .fp-head button:last-child').style.background='var(--cj-accent)';
+}
+function addMermaRow(){
+  const tb=document.getElementById('merma-tb');if(!tb)return;
+  const tr=document.createElement('tr');tr.className='cl-row';
+  tr.innerHTML=`<td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Producto..."></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td><td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);"><option>kg</option><option>lt</option><option>pz</option><option>gr</option></select></td><td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);"><option>Caducidad</option><option>Error prep.</option><option>Accidente</option><option>Devolución</option><option>Otro</option></select></td><td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Notas..."></td><td style="border:1px solid var(--border2);text-align:center;"><button style="background:none;border:none;color:var(--dim);cursor:pointer;" onclick="this.closest('tr').remove()">✕</button></td>`;
+  tb.appendChild(tr);tr.querySelector('input').focus();
+}
+
+function renderCalibration(el,cat,sub){
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head barra"><div><div class="fp-title"><i class="ti ti-coffee"></i> ${sub.name}</div><div class="fp-sub">Registro de calibración de espresso</div></div>
+    <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button></div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date"></div>
+        <div class="meta-f"><label>Turno</label><input type="text" placeholder="AM / PM"></div>
+        <div class="meta-f"><label>Barista</label><input type="text" placeholder="Nombre"></div>
+        <div class="meta-f"><label>Café / Lote</label><input type="text" placeholder="Origen / lote"></div>
+      </div>
+      <table class="inv-table">
+        <thead><tr>
+          <th style="background:var(--barra);color:white;font-size:9px;width:60px;font-family:var(--mono);">Prueba</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Dosis (gr)</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Rendimiento (gr)</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Tiempo (seg)</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Temperatura (°C)</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Resultado</th>
+          <th style="background:var(--barra);color:white;font-size:9px;font-family:var(--mono);">Ajuste realizado</th>
+        </tr></thead>
+        <tbody>
+          ${['1','2','3'].map(n=>`<tr class="cl-row">
+            <td style="border:1px solid var(--border2);text-align:center;font-family:var(--mono);font-size:12px;height:28px;">${n}</td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="18"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="36"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="27"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="93"></td>
+            <td style="border:1px solid var(--border2);">
+              <select style="width:100%;border:none;background:transparent;font-size:12px;height:28px;font-family:var(--font);">
+                <option>✓ Ideal</option><option>↑ Sobreextraído</option><option>↓ Subextraído</option>
+              </select>
+            </td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Molido +2 clics..."></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div class="info-card" style="margin-top:14px;">
+        <h4>Parámetros ideales</h4>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;">Dosis: 18–20 gr · Rendimiento: 36–40 gr (ratio 1:2) · Tiempo: 25–30 seg · Temperatura: 92–94 °C</p>
+      </div>
+    </div>
+  </div>`;
+  triggerFades();
+}
+
+function renderInventarioGeneral(el,cat,sub){
+  const items=['Harina de trigo (kg)','Mantequilla (kg)','Huevo (pz)','Azúcar (kg)','Sal (kg)','Levadura (gr)','Leche entera (lt)','Crema (lt)','Café en grano (kg)','Matcha (gr)','Leche de avena (lt)','Chocolate (kg)','Vainilla (ml)','Papel encerado (rollos)','Bolsas para llevar','Vasos desechables'];
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head ${cat.id}" style="border-color:${cat.color}">
+      <div><div class="fp-title" style="color:${cat.color}">${catIcon(cat.icon)} ${sub.name}</div><div class="fp-sub">Equipo mayor y menor · Registro quincenal</div></div>
+      <div class="fp-acts"><button class="btn btn-ghost btn-sm" onclick="addInvRow()">+ Ítem</button><button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button></div>
+    </div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date"></div>
+        <div class="meta-f"><label>Área</label><input type="text" value="${cat.name}"></div>
+        <div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre"></div>
+        <div class="meta-f"><label>Quincena</label><select><option>Q1 (1–15)</option><option>Q2 (16–31)</option></select></div>
+      </div>
+      <table class="inv-table">
+        <thead><tr>
+          <th style="width:28px;text-align:center;background:${cat.color};">No.</th>
+          <th style="text-align:left;padding-left:8px;background:${cat.color};">Descripción</th>
+          <th style="width:60px;background:${cat.color};">Inicial</th>
+          <th style="width:60px;background:${cat.color};">Q1</th>
+          <th style="width:60px;background:${cat.color};">Q2</th>
+          <th style="width:100px;background:${cat.color};">Unidad</th>
+          <th style="width:28px;background:var(--cj-dark);"></th>
+        </tr></thead>
+        <tbody id="inv-tb">
+          ${items.map((it,i)=>`<tr class="cl-row">
+            <td style="border:1px solid var(--border2);text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);">${i+1}</td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" value="${it}"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder=""></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder=""></td>
+            <td style="border:1px solid var(--border2);">
+              <select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);">
+                <option>kg</option><option>lt</option><option>pz</option><option>gr</option><option>ml</option><option>rollos</option><option>cajas</option>
+              </select>
+            </td>
+            <td style="border:1px solid var(--border2);text-align:center;"><button style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;" onclick="this.closest('tr').remove()">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+  triggerFades();
+}
+function addInvRow(){
+  const tb=document.getElementById('inv-tb');if(!tb)return;
+  const n=tb.children.length+1;
+  const tr=document.createElement('tr');tr.className='cl-row';
+  tr.innerHTML=`<td style="border:1px solid var(--border2);text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);">${n}</td><td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Descripción..."></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder=""></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder=""></td><td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);"><option>kg</option><option>lt</option><option>pz</option><option>gr</option><option>ml</option></select></td><td style="border:1px solid var(--border2);text-align:center;"><button style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;" onclick="this.closest('tr').remove()">✕</button></td>`;
+  tb.appendChild(tr);tr.querySelector('input').focus();
+}
+
+function renderEntradas(el,cat,sub){
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head almacen"><div><div class="fp-title"><i class="ti ti-package"></i> ${sub.name}</div><div class="fp-sub">Registro de entradas de mercancía</div></div>
+    <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button></div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date"></div>
+        <div class="meta-f"><label>Proveedor</label><input type="text" placeholder="Nombre del proveedor"></div>
+        <div class="meta-f"><label>Factura / Remisión</label><input type="text" placeholder="No. de documento"></div>
+        <div class="meta-f"><label>Recibió</label><input type="text" placeholder="Nombre"></div>
+      </div>
+      <table class="inv-table">
+        <thead><tr>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:28px;font-family:var(--mono);">No.</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;text-align:left;padding-left:8px;font-family:var(--mono);">Producto</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:70px;font-family:var(--mono);">Cantidad</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:80px;font-family:var(--mono);">Unidad</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:100px;font-family:var(--mono);">Caducidad</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:70px;font-family:var(--mono);">Temp. recep.</th>
+          <th style="background:var(--almacen);color:white;font-size:9px;width:60px;font-family:var(--mono);">Estado</th>
+          <th style="background:var(--cj-dark);width:28px;"></th>
+        </tr></thead>
+        <tbody id="ent-tb">
+          ${[1,2,3,4,5].map((n,i)=>`<tr class="cl-row">
+            <td style="border:1px solid var(--border2);text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);">${n}</td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Producto..."></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+            <td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);"><option>kg</option><option>lt</option><option>pz</option><option>gr</option></select></td>
+            <td style="border:1px solid var(--border2);"><input type="date" style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--mono);"></td>
+            <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="___ °C"></td>
+            <td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;font-family:var(--font);"><option>✓ OK</option><option><i class="ti ti-alert-triangle"></i> Obs.</option><option>✗ Rechaz.</option></select></td>
+            <td style="border:1px solid var(--border2);text-align:center;"><button style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;" onclick="this.closest('tr').remove()">✕</button></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <button class="add-btn" onclick="addEntradaRow()">+ Agregar producto</button>
+    </div>
+  </div>`;
+  triggerFades();
+}
+function addEntradaRow(){
+  const tb=document.getElementById('ent-tb');if(!tb)return;
+  const n=tb.children.length+1;
+  const tr=document.createElement('tr');tr.className='cl-row';
+  tr.innerHTML=`<td style="border:1px solid var(--border2);text-align:center;font-family:var(--mono);font-size:10px;color:var(--muted);">${n}</td><td style="border:1px solid var(--border2);"><input class="inv-inp desc" type="text" placeholder="Producto..."></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td><td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;"><option>kg</option><option>lt</option><option>pz</option><option>gr</option></select></td><td style="border:1px solid var(--border2);"><input type="date" style="width:100%;border:none;background:transparent;font-size:12px;height:25px;"></td><td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="___ °C"></td><td style="border:1px solid var(--border2);"><select style="width:100%;border:none;background:transparent;font-size:12px;height:25px;"><option>✓ OK</option><option><i class="ti ti-alert-triangle"></i> Obs.</option><option>✗ Rechaz.</option></select></td><td style="border:1px solid var(--border2);text-align:center;"><button style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:12px;" onclick="this.closest('tr').remove()">✕</button></td>`;
+  tb.appendChild(tr);tr.querySelector('input').focus();
+}
+
+function renderBanos(el,cat,sub){
+  const horas=['7:00 a.m.','8:00 a.m.','9:00 a.m.','10:00 a.m.','11:00 a.m.','12:00 p.m.','1:00 p.m.','2:00 p.m.','3:00 p.m.','4:00 p.m.','5:00 p.m.','6:00 p.m.','7:00 p.m.','8:00 p.m.'];
+  const cols=['Papel Baño','WC','Jabonera','Bote Basura','Papel Manos','Barrer','Espejo'];
+  const ths=cols.map(c=>`<th style="width:68px;text-align:center;background:var(--salon);color:white;font-size:9px;font-family:var(--mono);">${c}</th>`).join('');
+  const makeRow=(h,deep=false)=>`<tr class="${deep?'':'cl-row'}">
+    <td style="font-family:var(--mono);font-size:12px;padding:0 10px;height:26px;border:1px solid var(--border2);${deep?'background:var(--cj-dark);color:white;font-size:10px;':''}">${h}</td>
+    ${cols.map(()=>`<td style="text-align:center;vertical-align:middle;border:1px solid var(--border2);${deep?'background:rgba(0,80,86,.04);':''}"><input type="checkbox" style="width:14px;height:14px;accent-color:var(--cj);"></td>`).join('')}
+    <td style="border:1px solid var(--border2);"><input style="width:100%;border:none;background:transparent;padding:0 6px;font-size:12px;height:26px;font-family:var(--font);" type="text" placeholder=""></td>
+    <td style="border:1px solid var(--border2);"><input style="width:100%;border:none;background:transparent;padding:0 6px;font-size:12px;height:26px;font-family:var(--font);" type="text" placeholder=""></td>
+  </tr>`;
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head salon"><div><div class="fp-title"><i class="ti ti-tools-kitchen"></i> ${sub.name}</div><div class="fp-sub">16 franjas horarias + limpieza profunda 8:30pm</div></div>
+    <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button></div>
+    <div class="fp-body" style="overflow-x:auto;">
+      <div class="meta-row"><div class="meta-f"><label>Fecha</label><input type="date"></div><div class="meta-f"><label>Baño</label><select><option>Damas</option><option>Caballeros</option><option>Universal</option></select></div><div class="meta-f"><label>Elaboró</label><input type="text" placeholder="Nombre"></div><div class="meta-f"><label>Supervisó</label><input type="text" placeholder="Nombre"></div></div>
+      <table style="width:100%;border-collapse:collapse;min-width:780px;">
+        <thead><tr>
+          <th style="text-align:left;padding:6px 10px;background:var(--salon);color:white;font-size:9px;width:100px;">Hora</th>
+          ${ths}
+          <th style="background:var(--salon);color:white;font-size:9px;width:100px;text-align:center;">Responsable</th>
+          <th style="background:var(--salon);color:white;font-size:9px;text-align:left;padding:6px 8px;">Observaciones</th>
+        </tr></thead>
+        <tbody>${horas.map(h=>makeRow(h)).join('')}${makeRow('8:30 PM · LIMPIEZA PROFUNDA',true)}${makeRow('9:00 p.m.')}</tbody>
+      </table>
+    </div>
+  </div>`;
+  triggerFades();
+}
+
+function renderSupervisor(el,cat,sub){
+  const mc = document.getElementById('main-content');
+  renderChecklist(mc,{id:'supervisor',icon:'<i class="ti ti-eye"></i>',name:'Supervisor',color:'var(--cj)'},{name:'Supervisión de Turno'},'Verificación cruzada · Todas las áreas','cocina',[
+    {sec:'Cocina',items:['Temperaturas verificadas y dentro de rango.','PEPS aplicado correctamente.','Mise en place completo para el turno.','Área limpia y equipos funcionando.']},
+    {sec:'Barra',items:['Calibración espresso realizada y documentada.','Insumos completos para el turno.','Área de trabajo limpia y organizada.','Tiempos de entrega adecuados.']},
+    {sec:'Salón',items:['Mesas montadas correctamente.','Estaciones de servicio completas.','Personal con uniforme y actitud de servicio.','Baños habilitados y limpios.']},
+    {sec:'Cierre',items:['Corte de caja realizado y cuadrado.','Merma del día registrada en todas las áreas.','Bitácoras de inocuidad firmadas.','Incidencias reportadas y documentadas.'],dark:true},
+  ]);
+}
+
+function renderConteoVitrinas(el,cat,sub){
+  const productos=['Croissant Clásico','Chocolatín','Croissant Almendra','Roll de Canela','Panqué Plátano (Reb.)','Panqué Plátano (Loaf)','Tarta Limón','Galletas','Bowl de Proteína'];
+  el.innerHTML=`<div class="fp fade-in">
+    <div class="fp-head vitrinas"><div><div class="fp-title"><i class="ti ti-bread"></i> ${sub.name}</div><div class="fp-sub">Registro de producto en vitrina</div></div>
+    <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button></div>
+    <div class="fp-body">
+      <div class="meta-row"><div class="meta-f"><label>Fecha</label><input type="date"></div><div class="meta-f"><label>Turno</label><input type="text" placeholder="AM / PM"></div><div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre"></div><div class="meta-f"><label>Vitrina</label><select><option>Vitrina 1 — Refrigerada</option><option>Vitrina 2 — Seca</option><option>Mostrador</option></select></div></div>
+      <table class="inv-table">
+        <thead><tr>
+          <th style="text-align:left;padding-left:8px;background:var(--vitrinas);color:white;font-size:9px;">Producto</th>
+          <th style="background:var(--vitrinas);color:white;font-size:9px;width:80px;">Inicial AM</th>
+          <th style="background:var(--vitrinas);color:white;font-size:9px;width:80px;">Conteo 12pm</th>
+          <th style="background:var(--vitrinas);color:white;font-size:9px;width:80px;">Final PM</th>
+          <th style="background:var(--vitrinas);color:white;font-size:9px;width:80px;">Vendidos</th>
+          <th style="background:var(--cj-dark);color:white;font-size:9px;width:80px;">Sobrante</th>
+        </tr></thead>
+        <tbody>${productos.map((p,i)=>`<tr class="cl-row">
+          <td style="border:1px solid var(--border2);padding:0 8px;font-size:13px;height:26px;">${p}</td>
+          <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+          <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+          <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+          <td style="border:1px solid var(--border2);"><input class="inv-inp" type="text" placeholder="0"></td>
+          <td style="border:1px solid var(--border2);background:var(--vitrinas-bg);"><input class="inv-inp" type="text" placeholder="0" style="color:var(--vitrinas);font-weight:700;"></td>
+        </tr>`).join('')}</tbody>
+      </table>
+    </div>
+  </div>`;
+  triggerFades();
+}
+
+function renderSobrantesVitrinas(el,cat,sub){
+  renderConteoVitrinas(el,cat,sub);
+}
+
+function renderTempFoto(el,cat,sub){
+  const equipos = [
+    {id:'ref1', nombre:'Refrigerador 1', rango:'1 – 4', tipo:'ref'},
+    {id:'ref2', nombre:'Refrigerador 2', rango:'1 – 4', tipo:'ref'},
+    {id:'con1', nombre:'Congelador',     rango:'-18 a -22', tipo:'con'},
+    {id:'afria', nombre:'Area fria prep.',rango:'1 – 8', tipo:'ref'},
+  ];
+  const turno = ['AM','PM'];
+  let cards = equipos.map(eq => turno.map(t => `
+    <div style="background:white;border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--text);">${eq.nombre} <span style="font-size:10px;font-weight:400;color:var(--muted);">· Turno ${t}</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">Rango: ${eq.rango} °C</div>
+        </div>
+        <div id="ico-${eq.id}-${t}" style="font-size:22px;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:4px;">Temperatura °C</label>
+          <input type="number" id="temp-${eq.id}-${t}" placeholder="0.0" step="0.1"
+            style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;font-size:18px;font-family:var(--mono);font-weight:700;"
+            oninput="checkTemp('${eq.id}','${t}',${eq.tipo==='con'?-1:1},${eq.tipo==='con'?-22:4},${eq.tipo==='con'?-18:1})">
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cj);display:block;margin-bottom:4px;">Foto del equipo *</label>
+          <label for="foto-${eq.id}-${t}" style="display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px dashed var(--border);border-radius:7px;padding:8px;cursor:pointer;font-size:12px;color:var(--muted);background:var(--bg2);height:38px;transition:all .15s;"
+            id="foto-lbl-${eq.id}-${t}">
+            <i class="ti ti-camera" style="font-size:16px;"></i> Tomar foto
+          </label>
+          <input type="file" id="foto-${eq.id}-${t}" accept="image/*" capture="environment"
+            style="display:none;" onchange="previewFoto(this,'${eq.id}','${t}')">
+        </div>
+      </div>
+      <div id="preview-${eq.id}-${t}" style="margin-top:8px;display:none;">
+        <img style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;border:1.5px solid var(--border);">
+        <div style="font-size:11px;color:var(--cj-accent);margin-top:4px;font-weight:600;">Foto capturada</div>
+      </div>
+    </div>`).join('')).join('');
+
+  el.innerHTML = `<div class="fp fade-in">
+    <div class="fp-head cocina">
+      <div><div class="fp-title" style="color:var(--cj);">${catIcon(cat.icon)} ${sub.name}</div>
+      <div class="fp-sub">Temperaturas diarias + foto obligatoria de cada equipo</div></div>
+      <div class="fp-acts">
+        <button class="btn btn-ghost btn-sm" onclick="limpiarChecks()">Limpiar</button>
+        <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i> Imprimir</button>
+      </div>
+    </div>
+    <div class="fp-body">
+      <div class="meta-row">
+        <div class="meta-f"><label>Fecha</label><input type="date" id="temp-fecha"></div>
+        <div class="meta-f"><label>Turno</label><input type="text" placeholder="AM / PM" id="temp-turno"></div>
+        <div class="meta-f"><label>Responsable</label><input type="text" placeholder="Nombre" id="temp-resp"></div>
+        <div class="meta-f"><label>Supervisor</label><input type="text" placeholder="Nombre" id="temp-sup"></div>
+      </div>
+      <div id="temp-alerta" style="display:none;background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.3);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--danger);margin-bottom:12px;"></div>
+      ${cards}
+      <div style="margin-top:8px;padding:12px 14px;background:rgba(176,125,32,.07);border:1px solid rgba(176,125,32,.2);border-radius:8px;font-size:12px;color:var(--warn);">
+        <strong>Obligatorio:</strong> foto de cada equipo refrigerado en cada turno (AM y PM). Sin foto el turno no puede cerrarse.
+      </div>
+      <button onclick="cerrarTurnoTemp()" style="width:100%;margin-top:14px;background:var(--cj);color:var(--cj-orange);border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;">Validar y cerrar registro</button>
+      <div id="temp-ok" style="display:none;background:rgba(139,184,57,.12);border:1px solid rgba(139,184,57,.3);border-radius:8px;padding:12px;font-size:13px;color:var(--cj);margin-top:10px;text-align:center;font-weight:600;"></div>
+    </div>
+  </div>`;
+  triggerFades();
+}
+
+function checkTemp(id,turno,dir,max,min){
+  const val = parseFloat(document.getElementById('temp-'+id+'-'+turno).value);
+  const ico = document.getElementById('ico-'+id+'-'+turno);
+  const input = document.getElementById('temp-'+id+'-'+turno);
+  if(isNaN(val)){ ico.textContent=''; return; }
+  if(val>=min && val<=max){
+    ico.textContent='OK'; ico.style.color='var(--cj-accent)';
+    input.style.borderColor='var(--cj-accent)';
+  } else {
+    ico.textContent='ALERTA'; ico.style.color='var(--danger)'; ico.style.fontSize='14px';
+    input.style.borderColor='var(--danger)';
+  }
+}
+
+function previewFoto(input,id,turno){
+  const file = input.files[0]; if(!file) return;
+  const wrap = document.getElementById('preview-'+id+'-'+turno);
+  const lbl = document.getElementById('foto-lbl-'+id+'-'+turno);
+  const reader = new FileReader();
+  reader.onload = e => {
+    wrap.querySelector('img').src = e.target.result;
+    wrap.style.display='block';
+    lbl.innerHTML='<i class="ti ti-check" style="font-size:16px;color:var(--cj-accent);"></i> Foto OK';
+    lbl.style.borderColor='var(--cj-accent)';
+    lbl.style.color='var(--cj-accent)';
+    // Guardar referencia en sessionStorage (solo nombre, no datos)
+    try{ sessionStorage.setItem('foto_'+id+'_'+turno, file.name); }catch(e){}
+  };
+  reader.readAsDataURL(file);
+}
+
+function cerrarTurnoTemp(){
+  const alerta = document.getElementById('temp-alerta');
+  const ok = document.getElementById('temp-ok');
+  alerta.style.display='none'; ok.style.display='none';
+
+  const resp = document.getElementById('temp-resp')?.value.trim();
+  const sup = document.getElementById('temp-sup')?.value.trim();
+  if(!resp || !sup){ alerta.textContent='Falta nombre del responsable o supervisor.'; alerta.style.display='block'; return; }
+
+  // Verificar fotos AM (minimo obligatorio)
+  const equipos = ['ref1','ref2','con1','afria'];
+  const turno = document.getElementById('temp-turno')?.value.toUpperCase() || 'AM';
+  const t = turno.includes('PM') ? 'PM' : 'AM';
+  const sinFoto = equipos.filter(id => !sessionStorage.getItem('foto_'+id+'_'+t));
+  if(sinFoto.length > 0){
+    const nombres = {'ref1':'Refrigerador 1','ref2':'Refrigerador 2','con1':'Congelador','afria':'Area fria'};
+    alerta.textContent = 'Faltan fotos de: ' + sinFoto.map(id=>nombres[id]).join(', ') + '. Todas las fotos son obligatorias para cerrar el turno.';
+    alerta.style.display='block'; return;
+  }
+
+  // Verificar temperaturas
+  const sinTemp = equipos.filter(id => {
+    const v = document.getElementById('temp-'+id+'-'+t)?.value;
+    return !v || v.trim() === '';
+  });
+  if(sinTemp.length > 0){ alerta.textContent='Faltan temperaturas por registrar.'; alerta.style.display='block'; return; }
+
+  ok.textContent = 'Registro cerrado correctamente. Responsable: ' + resp + ' · Supervisor: ' + sup;
+  ok.style.display='block';
+}
+
+/* ════════════════════════════════════
+   B-04 · DISPLAY DE SABORES
+   Cocina y Barra — verificación semanal
+════════════════════════════════════ */
+function renderDisplaySabores(el,cat,sub,areaId){
+  const DS_DAYS=['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
+  const DS_MOS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const DS_N=25;
+  if(!window._dsWk) window._dsWk={};
+  if(window._dsWk[areaId]===undefined) window._dsWk[areaId]=0;
+
+  function dsWkDates(off){
+    const b=new Date(); b.setDate(b.getDate()+off*7);
+    const dw=b.getDay(),df=dw===0?-6:1-dw;
+    const m=new Date(b); m.setDate(b.getDate()+df); m.setHours(0,0,0,0);
+    return Array.from({length:7},(_,i)=>{const d=new Date(m);d.setDate(m.getDate()+i);return d;});
+  }
+  function dsIsoKey(dates){
+    const d=new Date(Date.UTC(dates[0].getFullYear(),dates[0].getMonth(),dates[0].getDate()));
+    const dw=d.getUTCDay()||7; d.setUTCDate(d.getUTCDate()+4-dw);
+    const y1=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    const wk=Math.ceil((((d-y1)/86400000)+1)/7);
+    return 'vk_b04_'+areaId+'_'+d.getUTCFullYear()+'-W'+String(wk).padStart(2,'0');
+  }
+  function dsFmt(d){return d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0');}
+  function dsRange(dates){
+    const s=dates[0],e=dates[6];
+    return s.getDate()+' '+DS_MOS[s.getMonth()]+' — '+e.getDate()+' '+DS_MOS[e.getMonth()]+' '+e.getFullYear();
+  }
+  function dsTodayIdx(off){
+    if(off!==0)return -1;
+    const dw=new Date().getDay(); return dw===0?6:dw-1;
+  }
+  function dsEsc(s){
+    if(!s)return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+  }
+  function dsLoad(dates){
+    try{const r=localStorage.getItem(dsIsoKey(dates));return r?JSON.parse(r):null;}catch(e){return null;}
+  }
+  function dsSave(){
+    const dates=dsWkDates(window._dsWk[areaId]);
+    const rows=[];
+    for(let i=0;i<DS_N;i++){
+      const ne=document.getElementById('dsn_'+areaId+'_'+i);
+      const nte=document.getElementById('dsnt_'+areaId+'_'+i);
+      const dias={};
+      DS_DAYS.forEach((d,di)=>{const cb=document.getElementById('dscb_'+areaId+'_'+i+'_'+di);dias[d]=!!(cb&&cb.checked);});
+      rows.push({nombre:ne?ne.value:'',notas:nte?nte.value:'',dias});
+    }
+    const mp=document.getElementById('dsmp_'+areaId);
+    const me=document.getElementById('dsme_'+areaId);
+    const mr=document.getElementById('dsmr_'+areaId);
+    const ob=document.getElementById('dsob_'+areaId);
+    sbUpsertDisplay(areaId,dsIsoKey(dates).split('_').pop(),{proyecto:mp?mp.value:'',elaboro:me?me.value:'',reviso:mr?mr.value:'',obs:ob?ob.value:'',rows});try{localStorage.setItem(dsIsoKey(dates),JSON.stringify({
+      proyecto:mp?mp.value:'',elaboro:me?me.value:'',
+      reviso:mr?mr.value:'',obs:ob?ob.value:'',rows
+    }));}catch(e){}
+    guardarProgreso();
+  }
+
+  function dsRebuild(){
+    const off=window._dsWk[areaId];
+    const dates=dsWkDates(off);
+    const ti=dsTodayIdx(off);
+    const data=dsLoad(dates);
+    const aC=areaId==='cocina'?'var(--cj)':'var(--barra)';
+    const aBg=areaId==='cocina'?'var(--cocina-bg)':'var(--barra-bg)';
+
+    let html=`<div class="fp fade-in">
+      <div class="fp-head ${areaId}">
+        <div>
+          <div class="fp-title">${catIcon(cat.icon)} ${sub.name}</div>
+          <div class="fp-sub">Verificación semanal · B-04 &nbsp;·&nbsp; ${dsRange(dates)}</div>
+        </div>
+        <div class="fp-acts">
+          <button class="btn btn-ghost btn-sm" onclick="window._dsNav('${areaId}',-1)">&#9664; Semana</button>
+          <button class="btn btn-ghost btn-sm" onclick="window._dsNav('${areaId}',1)">Semana &#9654;</button>
+          <button class="btn btn-kale btn-sm" onclick="window.print()"><i class="ti ti-printer" style="font-size:13px;"></i></button>
+        </div>
+      </div>
+      <div class="fp-body">
+        <div class="meta-row">
+          <div class="meta-f"><label>Semana</label>
+            <input type="text" value="${dsRange(dates)}" readonly
+              style="background:var(--bg2);color:var(--muted);font-size:11px;font-family:var(--mono);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;width:100%"></div>
+          <div class="meta-f"><label>Proyecto / Cliente</label>
+            <input type="text" id="dsmp_${areaId}" value="${dsEsc(data&&data.proyecto?data.proyecto:'Corazón de Jaguar')}"
+              style="border:1px solid var(--border2);border-radius:6px;padding:6px 10px;width:100%;font-family:inherit;font-size:13px;outline:none;background:var(--bg)"
+              oninput="window._dsSave('${areaId}')"></div>
+          <div class="meta-f"><label>Elaboró</label>
+            <input type="text" id="dsme_${areaId}" value="${dsEsc(data&&data.elaboro?data.elaboro:'')}"
+              placeholder="Responsable"
+              style="border:1px solid var(--border2);border-radius:6px;padding:6px 10px;width:100%;font-family:inherit;font-size:13px;outline:none;background:var(--bg)"
+              oninput="window._dsSave('${areaId}')"></div>
+          <div class="meta-f"><label>Revisó</label>
+            <input type="text" id="dsmr_${areaId}" value="${dsEsc(data&&data.reviso?data.reviso:'')}"
+              placeholder="Supervisor"
+              style="border:1px solid var(--border2);border-radius:6px;padding:6px 10px;width:100%;font-family:inherit;font-size:13px;outline:none;background:var(--bg)"
+              oninput="window._dsSave('${areaId}')"></div>
+        </div>
+
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border2);border-radius:8px;overflow:hidden;margin-bottom:14px">
+          <table style="width:100%;border-collapse:collapse;min-width:700px">
+            <thead><tr>
+              <th style="width:32px;background:${aC};color:#fff;font-size:9px;font-family:var(--mono);padding:9px 4px;text-align:center;letter-spacing:1px">#</th>
+              <th style="background:${aC};color:#fff;font-size:9px;font-family:var(--mono);padding:9px 10px;text-align:left;min-width:160px;letter-spacing:1px">SALSA / PREPARACIÓN</th>
+              ${DS_DAYS.map((d,di)=>{
+                const iT=di===ti;
+                return `<th style="width:50px;background:${iT?'var(--cj-accent)':aC};color:#fff;font-size:9px;font-family:var(--mono);padding:9px 4px;text-align:center;letter-spacing:1px">${d}<br><span style="font-size:9px;font-weight:400;opacity:.75">${dsFmt(dates[di])}</span></th>`;
+              }).join('')}
+              <th style="background:${aC};color:#fff;font-size:9px;font-family:var(--mono);padding:9px 10px;text-align:left;min-width:100px;letter-spacing:1px">NOTAS</th>
+            </tr></thead>
+            <tbody>`;
+
+    for(let i=0;i<DS_N;i++){
+      const row=data&&data.rows&&data.rows[i]?data.rows[i]:null;
+      const nombre=row?dsEsc(row.nombre):'';
+      const notas=row?dsEsc(row.notas):'';
+      const act=nombre.trim()!=='';
+      html+=`<tr style="border-bottom:1px solid var(--border2);background:${act?aBg:'transparent'}" id="dstr_${areaId}_${i}">
+        <td style="text-align:center;font-size:11px;font-family:var(--mono);font-weight:${act?'600':'400'};color:${act?aC:'var(--muted)'};padding:0 4px;background:var(--bg2);border-right:1px solid var(--border2)">${i+1}</td>
+        <td style="padding:0;border-right:1px solid var(--border2)">
+          <input type="text" id="dsn_${areaId}_${i}" value="${nombre}"
+            placeholder="Nombre de salsa o preparación..." autocomplete="off" spellcheck="false"
+            style="width:100%;border:none;background:transparent;font-size:13px;color:var(--text);padding:0 10px;height:36px;font-family:inherit;outline:none"
+            oninput="window._dsOnName('${areaId}',${i})">
+        </td>
+        ${DS_DAYS.map((d,di)=>{
+          const chk=row&&row.dias&&row.dias[d]?'checked':'';
+          const iT=di===ti;
+          const cBg=iT&&act?'rgba(139,184,57,.12)':iT?'rgba(139,184,57,.05)':'transparent';
+          return `<td style="text-align:center;padding:0;background:${cBg};border-right:1px solid var(--border2)">
+            <label style="display:flex;align-items:center;justify-content:center;height:36px;cursor:pointer;width:100%">
+              <input type="checkbox" id="dscb_${areaId}_${i}_${di}" ${chk}
+                style="width:16px;height:16px;accent-color:${aC};cursor:pointer"
+                onchange="window._dsSave('${areaId}')" aria-label="${d} fila ${i+1}">
+            </label>
+          </td>`;
+        }).join('')}
+        <td style="padding:0">
+          <input type="text" id="dsnt_${areaId}_${i}" value="${notas}" placeholder="—" autocomplete="off"
+            style="width:100%;border:none;background:transparent;font-size:12px;color:var(--muted);padding:0 8px;height:36px;font-family:inherit;outline:none"
+            oninput="window._dsSave('${areaId}')">
+        </td>
+      </tr>`;
+    }
+
+    html+=`</tbody></table></div>
+
+        <div style="margin-bottom:4px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Observaciones</div>
+          <textarea id="dsob_${areaId}"
+            style="width:100%;border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-family:inherit;font-size:13px;color:var(--text);background:var(--bg);resize:vertical;min-height:64px;outline:none"
+            placeholder="Notas de la semana, incidencias, cambios de producto..."
+            oninput="window._dsSave('${areaId}')">${dsEsc(data&&data.obs?data.obs:'')}</textarea>
+        </div>
+      </div>
+    </div>`;
+
+    el.innerHTML=html;
+    triggerFades();
+  }
+
+  /* Expose handlers — areaId param guards against stale closures */
+  window._dsSave=function(aid){if(aid===areaId)dsSave();};
+  window._dsNav=function(aid,dir){
+    if(aid!==areaId)return;
+    dsSave();
+    window._dsWk[areaId]+=dir;
+    dsRebuild();
+  };
+  window._dsOnName=function(aid,i){
+    if(aid!==areaId)return;
+    const ne=document.getElementById('dsn_'+areaId+'_'+i);
+    const tr=document.getElementById('dstr_'+areaId+'_'+i);
+    if(!ne||!tr)return;
+    const act=ne.value.trim()!=='';
+    const aC=areaId==='cocina'?'var(--cj)':'var(--barra)';
+    const aBg=areaId==='cocina'?'var(--cocina-bg)':'var(--barra-bg)';
+    tr.style.background=act?aBg:'transparent';
+    const numTd=tr.querySelector('td:first-child');
+    if(numTd){numTd.style.color=act?aC:'var(--muted)';numTd.style.fontWeight=act?'600':'400';}
+    dsSave();
+  };
+
+  dsRebuild();
+}
+
+function renderComingSoon(el,cat,sub){
+  const phrases = {
+    cocina:'Este módulo de cocina está germinando — nutriéndose con los estándares de alimentos reales para brotar pronto.',
+    barra:'Este módulo de barra está echando raíces — cada bebida perfecta tiene su proceso. Florecerá pronto.',
+    almacen:'El almacén está tomando forma — cada entrada, cada salida, trazabilidad real. En proceso.',
+    salon:'El salón está listo para crecer — cada detalle del servicio consciente está por venir.',
+    servicio:'El protocolo de servicio está fermentando — se sirve con energía e intención. Próximamente.',
+    vitrinas:'La vitrina está floreciendo — cada pieza exhibida con propósito. En proceso.',
+  };
+  el.innerHTML=`<div class="denied fade-in">
+    <div class="denied-icon">${catIcon(cat.icon)}</div>
+    <div class="denied-title">${sub.name} — En proceso</div>
+    <div class="denied-sub">${phrases[cat.id]||'Este módulo está germinando. Regresa pronto.'}</div>
+  </div>`;
+  triggerFades();
+}
+
+function renderDenied(){
+  document.getElementById('main-content').innerHTML=`<div class="denied fade-in"><div class="denied-icon"><i class="ti ti-lock"></i></div><div class="denied-title">Área restringida</div><div class="denied-sub">No tienes acceso a esta área. Contacta a tu supervisor.</div></div>`;
+  triggerFades();
+}
+
+/* ════════════════════════════════════
+   TRANSVERSALES
+════════════════════════════════════ */
+function showSupervisor(){
+  setNavActive('nav-supervisor');
+  const mc=document.getElementById('main-content');
+  const cat={id:'supervisor',icon:'<i class="ti ti-eye"></i>',name:'Supervisor',color:'var(--cj)'};
+  const sub={name:'Verificación Cruzada'};
+  renderChecklist(mc,cat,sub,'Verificación cruzada · Todas las áreas','cocina',[
+    {sec:'Cocina',items:['Temperaturas verificadas y dentro de rango.','PEPS aplicado correctamente.','Mise en place completo para el turno.','Área limpia y equipos funcionando.']},
+    {sec:'Barra',items:['Calibración espresso realizada y documentada.','Insumos completos para el turno.','Área de trabajo limpia y organizada.','Tiempos de entrega adecuados.']},
+    {sec:'Salón',items:['Mesas montadas correctamente.','Estaciones de servicio completas.','Personal con uniforme y actitud de servicio.','Baños habilitados y limpios.']},
+    {sec:'Cierre General',items:['Corte de caja realizado y cuadrado.','Merma del día registrada en todas las áreas.','Bitácoras de inocuidad firmadas.','Incidencias reportadas.'],dark:true},
+  ]);
+}
+
+function showAlerts(){
+  setNavActive('nav-alertas');
+  document.getElementById('main-content').innerHTML=`<div class="fade-in">
+    <div class="fp"><div class="fp-head cocina"><div><div class="fp-title"><i class="ti ti-bell"></i> Alertas & Reportes</div><div class="fp-sub">Resumen del día · Estado operativo</div></div></div>
+    <div class="fp-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="info-card"><h4>Estado del día</h4>
+          <div class="status-row"><span class="status-label">Cocina</span><span class="status-val ok">● Operando</span></div>
+          <div class="status-row"><span class="status-label">Barra</span><span class="status-val ok">● Operando</span></div>
+          <div class="status-row"><span class="status-label">Salón</span><span class="status-val ok">● Operando</span></div>
+          <div class="status-row"><span class="status-label">Vitrinas</span><span class="status-val warn"><i class="ti ti-alert-triangle"></i> Revisar temp.</span></div>
+        </div>
+        <div class="info-card"><h4>Bitácoras del día</h4>
+          <div class="status-row"><span class="status-label">Inocuidad AM</span><span class="status-val ok">✓ Firmada</span></div>
+          <div class="status-row"><span class="status-label">Calibración barra</span><span class="status-val ok">✓ Firmada</span></div>
+          <div class="status-row"><span class="status-label">Baños (última rev.)</span><span class="status-val">12:00 p.m.</span></div>
+          <div class="status-row"><span class="status-label">Corte de caja</span><span class="status-val warn"><i class="ti ti-clock"></i> Pendiente</span></div>
+        </div>
+      </div>
+      <div class="info-card" style="margin-top:14px;"><h4>Módulo en desarrollo</h4><p>Las alertas automáticas por WhatsApp y el dashboard en tiempo real están en proceso de implementación — Semana 9–10 del roadmap.</p></div>
+    </div></div>
+  </div>`;
+  triggerFades();
+}
+
+/* ════════════════════════════════════
+   ADMIN — USUARIOS & ROLES
+════════════════════════════════════ */
+let editUID = null;
+
+function showAdmin(){
+  if(!isAdmin()){ renderDenied(); return; }
+  setNavActive('nav-admin');
+  const users = getUsers().filter(u=>!u.hidden);
+  const mc = document.getElementById('main-content');
+  mc.innerHTML=`
+    <div class="admin-bar fade-in"><span class="admin-badge-sm">Admin · Control Absoluto</span>Gestión de usuarios, roles y áreas de acceso. Solo visible en sesión admin.</div>
+    <div class="fp fade-in">
+      <div class="fp-head cocina">
+        <div><div class="fp-title"><i class="ti ti-settings"></i> Usuarios & Roles</div><div class="fp-sub">Corazón de Jaguar · Portal Operativo</div></div>
+        <button class="btn btn-kale btn-sm" onclick="openNewUser()">+ Nuevo usuario</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="user-table">
+          <thead><tr><th>Usuario</th><th>Familia</th><th>Áreas</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody>
+            ${users.map(u=>`<tr>
+              <td>
+                <strong>${u.name}</strong><br>
+                <span style="font-size:11px;font-family:var(--mono);color:var(--muted);">${u.email}</span>
+              </td>
+              <td><span class="role-pill ${FAMILIAS[u.rol]?.pill||'rp-mesero'}">${FAMILIAS[u.rol]?.label||u.rol}</span></td>
+              <td style="font-size:11px;color:var(--muted);max-width:180px;">${(u.cats||[]).join(', ')||'—'}</td>
+              <td>
+                ${u.status==='pending'
+                  ? '<span style="color:var(--warn);font-size:12px;font-weight:700;background:rgba(176,125,32,.08);padding:3px 8px;border-radius:6px;"><i class="ti ti-clock"></i> Pendiente</span>'
+                  : u.active
+                    ? '<span style="color:var(--cj-accent);font-size:12px;font-weight:700;">● Activo</span>'
+                    : '<span style="color:var(--danger);font-size:12px;font-weight:700;">○ Inactivo</span>'
+                }
+              </td>
+              <td style="display:flex;gap:5px;flex-wrap:wrap;">
+                <button class="act-btn" onclick="openEditUser('${u.id}')">Editar</button>
+                <button class="act-btn" style="color:${u.status==='pending'?'var(--cj-accent)':u.active?'var(--danger)':'var(--cj-accent)'};" 
+                  onclick="toggleUser('${u.id}')">${u.status==='pending'?'✓ Activar':u.active?'Desactivar':'Activar'}</button>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  triggerFades();
+}
+
+function openNewUser(){
+  editUID=null;
+  document.getElementById('modal-title').textContent='Nuevo usuario';
+  document.getElementById('m-name').value='';
+  document.getElementById('m-email').value='';
+  document.getElementById('m-pass').value='';
+  document.getElementById('m-rol').value='chef';
+  updateModalAreas();
+  document.getElementById('user-modal').style.display='flex';
+}
+function openEditUser(uid){
+  const users=getUsers();
+  const u=users.find(x=>x.id===uid);if(!u)return;
+  editUID=uid;
+  document.getElementById('modal-title').textContent='Editar usuario';
+  document.getElementById('m-name').value=u.name;
+  document.getElementById('m-email').value=u.email;
+  document.getElementById('m-pass').value=u.pass;
+  document.getElementById('m-rol').value=u.rol;
+  updateModalAreas();
+  document.querySelectorAll('#modal-areas input[type=checkbox]').forEach(cb=>{
+    cb.checked=(u.cats||[]).includes(cb.value);
+  });
+  document.getElementById('user-modal').style.display='flex';
+}
+function updateModalAreas(){
+  const rol=document.getElementById('m-rol').value;
+  const def=FAMILIAS[rol]?.cats||[];
+  document.getElementById('modal-areas').innerHTML=ESTRUCTURA.map(cat=>`
+    <label class="area-chk">
+      <input type="checkbox" value="${cat.id}" ${def.includes(cat.id)?'checked':''}>
+      ${catIcon(cat.icon)} ${cat.name}
+    </label>`).join('');
+}
+function closeModal(){ document.getElementById('user-modal').style.display='none'; }
+function saveUser(){
+  const name=document.getElementById('m-name').value.trim();
+  const email=document.getElementById('m-email').value.trim().toLowerCase();
+  const pass=document.getElementById('m-pass').value.trim();
+  const rol=document.getElementById('m-rol').value;
+  const cats=[...document.querySelectorAll('#modal-areas input:checked')].map(c=>c.value);
+  if(!name||!email||!pass){alert('Completa todos los campos.');return;}
+  const users=getUsers();
+  if(editUID){
+    const idx=users.findIndex(u=>u.id===editUID);
+    if(idx>=0) users[idx]={...users[idx],name,email,pass,rol,cats,status:undefined};
+  }else{
+    users.push({id:'u'+Date.now(),name,email,pass,rol,cats,trans:FAMILIAS[rol]?.trans||[],active:false,status:'pending'});
+  }
+  saveUsers(users);
+  closeModal();
+  showAdmin();
+}
+function toggleUser(uid){
+  const users=getUsers();
+  const idx=users.findIndex(u=>u.id===uid);
+  if(idx>=0){
+    if(users[idx].status==='pending'){ users[idx].active=true; delete users[idx].status; }
+    else users[idx].active=!users[idx].active;
+  }
+  saveUsers(users);
+  showAdmin();
+}
+
+/* ════════════════════════════════════
+   UTILS
+════════════════════════════════════ */
+
+function catIcon(icon){
+  const map={
+    kitchen:'<i class="ti ti-tools-kitchen-2"></i>',
+    coffee:'<i class="ti ti-coffee"></i>',
+    package:'<i class="ti ti-package"></i>',
+    restaurant:'<i class="ti ti-tools-kitchen"></i>',
+    service:'<i class="ti ti-users"></i>',
+    vitrine:'<i class="ti ti-bread"></i>',
+  };
+  return map[icon]||icon;
+}
+
+function triggerFades(){
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.fade-in').forEach(el=>{
+      el.classList.remove('show');
+      requestAnimationFrame(()=>el.classList.add('show'));
+    });
+  });
+}
+</script>
+</body>
+</html>
